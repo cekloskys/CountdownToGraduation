@@ -12,9 +12,10 @@ import Router from './src/navigation/Router';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Reanimated 2']);
 import { StatusBar } from 'react-native';
+import { ApolloProvider } from "@apollo/client";
 StatusBar.setBarStyle('dark-content', true);
 const database = require('./src/components/Handlers/database.js')
-
+import { client } from "./apollo";
 
 const App = () => {
   try {
@@ -24,7 +25,11 @@ const App = () => {
     console.log(error);
   }
 
-  return <Router />;
+  return (
+      <ApolloProvider client={client}>
+        <Router />
+      </ApolloProvider>
+  );
 };
 
 export default App;

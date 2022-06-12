@@ -10,7 +10,7 @@ const NewCourseButton = props => {
   return (
     <TouchableOpacity
       style={styles.button}
-      onPress={() => navigation.navigate('New Course')}>
+      onPress={() => navigation.navigate('Search')}>
       <Ionicons name={'add'} size={30} color={'white'} />
     </TouchableOpacity>
   );

@@ -17,37 +17,16 @@ import {useNavigation} from '@react-navigation/native';
 const database = require('../../components/Handlers/database.js');
 
 const NewCourseScreen = props => {
-  const [code, setCode] = useState('');
-  const [name, setName] = useState('');
-  const [semester, setSemester] = useState('');
-  const [credits, setCredits] = useState('');
+  const post = props.route.params.post;
+
+  const [code, setCode] = useState(post.courseCode);
+  const [name, setName] = useState(post.courseTitle);
+  const [semester, setSemester] = useState('Fall 2022');
+  const [credits, setCredits] = useState(post.credits);
   const [status, setStatus] = useState('');
   const [designator, setDesignator] = useState('');
   const [selectedDesignators, setSelectedDesignators] = useState([])
 
-  // const statuses = ['Complete', 'In Progress', 'Not Complete'];
-  /* const designators = [
-    '1st Major',
-    '2nd Major',
-    '1st Minor',
-    '2nd Minor',
-    'Core',
-    'Elective',
-  ]; */
-  const credit = [{
-    id: '1',
-    item: '1'
-  }, {
-    id: '2',
-    item: '2'
-  }, {
-    id: '3',
-    item: '3'
-  }, {
-    id: '4',
-    item: '4'
-  },
-  ];
   const statuses = [{
     id: '1',
     item: 'Complete'
@@ -90,10 +69,6 @@ const NewCourseScreen = props => {
       alert('Please fill in Course Name');
       return;
     }
-    if (!semester) {
-      alert('Please fill in Semester');
-      return;
-    }
     if (!selectedDesignators || selectedDesignators.length === 0) {
       alert('Please select Designators');
       return;
@@ -107,28 +82,28 @@ const NewCourseScreen = props => {
       return;
     }
 
-    const course = {
+    /* const course = {
       code,
       name,
       credits,
       semester,
       status,
       designator,
-    };
-    // console.log(selectedDesignators);
+    }; */
+    // console.log(code);
     const sortedSelectedDesignators = sortBy(selectedDesignators, 'id');
     // console.log(sortedSelectedDesignators);
     let i = 0;
     sortedSelectedDesignators.forEach( item => {
       if (i === 0) {
         database
-            .addCourse(code, name, credits.item, semester, status.item, item.item, code, 1)
+            .addCourse(code, name, credits, semester, status.item, item.item, code, 1)
             .catch(e => {
               console.log(e);
             });
       } else {
         database
-            .addCourse(code, name, credits.item, semester, status.item, item.item, code, 0)
+            .addCourse(code, name, credits, semester, status.item, item.item, code, 0)
             .catch(e => {
               console.log(e);
             });
@@ -136,16 +111,6 @@ const NewCourseScreen = props => {
       i++;
     })
 
-    /*
-        console.warn(
-          code,
-          name,
-          semester,
-          credits,
-          status,
-          designator
-        );
-        */
     alert('Course Created!');
     navigation.navigate('Get started!');
   };
@@ -160,8 +125,6 @@ const NewCourseScreen = props => {
               value={code}
               onChangeText={value => setCode(value)}
               style={styles.codeInput}
-              placeholder={'Code'}
-              placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
               maxLength={10}
           />
@@ -169,16 +132,12 @@ const NewCourseScreen = props => {
               value={name}
               onChangeText={value => setName(value)}
               style={styles.nameInput}
-              placeholder={'Name'}
-              placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
           />
           <TextInput
-              value={semester}
-              onChangeText={value => setSemester(value)}
+              value={credits.toString()}
+              onChangeText={value => setCredits(value)}
               style={styles.semesterInput}
-              placeholder={'Semester'}
-              placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
               maxLength={11}
           />
@@ -195,19 +154,6 @@ const NewCourseScreen = props => {
               toggleIconColor={'grey'}
               multiOptionContainerStyle={styles.multiOptionContainerStyle}
               multiOptionsLabelStyle={styles.multiOptionsLabelStyle}
-              labelStyle={styles.labelStyle}
-              containerStyle={styles.containerStyle}
-          />
-          <SelectBox
-              label="Credits ..."
-              options={credit}
-              value={credits}
-              onChange={onChangeCredits()}
-              hideInputFilter={true}
-              arrowIconColor={'grey'}
-              searchIconColor={'grey'}
-              toggleIconColor={'grey'}
-              optionsLabelStyle={styles.multiOptionsLabelStyle}
               labelStyle={styles.labelStyle}
               containerStyle={styles.containerStyle}
           />
@@ -241,10 +187,6 @@ const NewCourseScreen = props => {
 
   function onChange() {
     return (val) => setStatus(val)
-  }
-
-  function onChangeCredits() {
-    return (val) => setCredits(val)
   }
 };
 
