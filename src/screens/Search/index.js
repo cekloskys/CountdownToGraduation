@@ -38,6 +38,8 @@ const SearchScreen = props => {
     ];
 
   const onCourseAdd = () => {
+      // navigation.navigate('Search Results');
+      // navigation.navigate('Search Results', {courseCode: courseCode});
     navigation.navigate('Search Results', {divisionCodes: selectedDivisionCodes});
   };
 

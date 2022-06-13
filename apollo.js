@@ -12,7 +12,7 @@ const URI = 'http://localhost:4000/';
 const androidURI = 'http://192.168.1.186:4000/';
 
 const httpLink = createHttpLink({
-    uri: androidURI,
+    uri: URI,
 });
 
 const authLink = setContext(async (_, { headers }) => {

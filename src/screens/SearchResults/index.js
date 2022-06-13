@@ -45,13 +45,15 @@ query getCoursesByDivisionCodes ($divisionCodes: [String!]) {
 const SearchResultsScreen = props => {
 
   const route = useRoute();
-  const courseCode = route.params.courseCode;
+  // const courseCode = route.params.courseCode;
   const divisionCodes = route.params.divisionCodes;
   const [codes, setCodes] = useState([]);
 
-  divisionCodes.forEach( item => {
-    codes.push(item.item);
-  });
+  if (divisionCodes) {
+    divisionCodes.forEach( item => {
+      codes.push(item.item);
+    });
+  }
 
   // console.log(codes);
 
