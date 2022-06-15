@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {View, FlatList, Alert } from 'react-native';
+import {Text, View, FlatList, Alert } from 'react-native';
 import styles from './styles';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import SearchCourse from "../../components/SearchCourse";
 import { useQuery, gql } from "@apollo/client";
 import { useRoute } from '@react-navigation/native';
+import 'localstorage-polyfill'; 
 
 const MY_COURSES = gql`
 query getCourses {
-  getCourses {
+  courses {
     divisionCode
     courseCode
     courseTitle
@@ -19,8 +20,8 @@ query getCourses {
 `;
 
 const MY_COURSES_BY_CODE = gql`
-query getCoursesByCode ($courseCode: String!) {
-  getCoursesByCode (courseCode: $courseCode) {
+query getCoursesByCode($courseCode: String) {
+  courseByCode(courseCode: $courseCode) {
     divisionCode
     courseCode
     courseTitle
@@ -31,8 +32,19 @@ query getCoursesByCode ($courseCode: String!) {
 `;
 
 const MY_COURSES_BY_DIVISION_CODES = gql`
-query getCoursesByDivisionCodes ($divisionCodes: [String!]) {
-  getCoursesByDivisionCodes (divisionCodes: $divisionCodes) {
+query CourseByDivision($divisionCodes: [String]) {
+  courseByDivision(divisionCodes: $divisionCodes) {
+    divisionCode
+    courseCode
+    courseTitle
+    credits
+  }
+}
+`;
+
+const MY_COURSES_BY = gql`
+query CoursesBy($divisionCodes: [String], $courseCode: String, $courseTitle: String) {
+  coursesBy(divisionCodes: $divisionCodes, courseCode: $courseCode, courseTitle: $courseTitle) {
     divisionCode
     courseCode
     courseTitle
@@ -42,24 +54,67 @@ query getCoursesByDivisionCodes ($divisionCodes: [String!]) {
 }
 `;
 
-const SearchResultsScreen = props => {
+function SearchResults() {
 
-  const route = useRoute();
-  const courseCode = route.params.courseCode;
-  const divisionCodes = route.params.divisionCodes;
-  const [codes, setCodes] = useState([]);
+  // const route = useRoute();
+  // const courseCode = route.params.courseCode;
+  // const divisionCodes = route.params.divisionCodes;
+  // const courseTitle = route.params.courseTitle
 
-  divisionCodes.forEach( item => {
-    codes.push(item.item);
-  });
-
-  // console.log(codes);
+  const divisionCodes = JSON.parse(localStorage.getItem('division'))
+  const courseCode = localStorage.getItem('code')
+  const courseTitle = localStorage.getItem('title')
+  
+  console.log(divisionCodes);
+  console.log(courseCode);
+  console.log(courseTitle);
 
   const [results, setResults] = useState([]);
 
   // const {data, error, loading} = useQuery(MY_COURSES);
   // const {data, error, loading} = useQuery(MY_COURSES_BY_CODE, {variables: {courseCode}});
-  const {data, error, loading} = useQuery(MY_COURSES_BY_DIVISION_CODES, {variables: {divisionCodes: codes}});
+  const {data, error, loading} = useQuery(MY_COURSES_BY, {variables: {divisionCodes: divisionCodes, courseCode: courseCode, courseTitle: courseTitle}});
+  //console.log(data);
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Error fetching courses!', error.message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    //  console.log('Testing');
+    //console.log(data);
+    if (data) {    
+      setResults(data.coursesBy);
+    }
+  }, [data]);
+  console.log(data);
+  
+    return (
+      <View>
+        <FlatList
+            data={results}
+            renderItem={({item}) => <SearchCourse course={item}/>}
+            style={styles.outer}
+        />
+      </View>
+    );
+  
+};
+function SearchResultsScreen() {
+
+  const route = useRoute();
+  const courseCode = route.params.courseCode;
+  const divisionCodes = route.params.divisionCodes;
+  
+  console.log(divisionCodes);
+  console.log(courseCode);
+
+  const [results, setResults] = useState([]);
+
+  // const {data, error, loading} = useQuery(MY_COURSES);
+  // const {data, error, loading} = useQuery(MY_COURSES_BY_CODE, {variables: {courseCode}});
+  const {data, error, loading} = useQuery(MY_COURSES_BY, {variables: {divisionCodes: divisionCodes, courseCode: courseCode}});
 
   useEffect(() => {
     if (error) {
@@ -71,7 +126,7 @@ const SearchResultsScreen = props => {
     // console.log('Testing');
     if (data) {
       console.log(data);
-      setResults(data.getCoursesByDivisionCodes);
+      setResults(data.coursesBy);
     }
   }, [data]);
 
@@ -91,4 +146,4 @@ const SearchResultsScreen = props => {
   );
 };
 
-export default SearchResultsScreen;
+export default SearchResults;

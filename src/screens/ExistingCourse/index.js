@@ -298,6 +298,7 @@ const ExistingCourseScreen = props => {
               placeholder={'Name'}
               placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
+              
           />
           <TextInput
               value={semester}

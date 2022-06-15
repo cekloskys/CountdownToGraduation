@@ -34,6 +34,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
   },
+  filterButton: {
+    backgroundColor: 'red',
+    position: 'absolute',
+    width: '80%',
+    height: 25,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: "10%",
+    alignSelf: 'center'
+  },
+  filterButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
   bottomContainer: {
     width: '100%',
     height: 50,
@@ -98,6 +114,15 @@ const styles = StyleSheet.create({
   },
   containerStyle : {
     marginBottom: 5,
+  },
+  textSpacer: {
+    marginBottom:40
+  },
+  outerBig: {
+    height: '84%',
+  },
+  outerSmall: {
+    height: '66%',
   },
 });
 
