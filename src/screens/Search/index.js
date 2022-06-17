@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, Pressable, StyleSheet} from 'react-native';
 import styles from './styles';
-import {useNavigation} from '@react-navigation/native';
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy, sortBy} from 'lodash';
 import 'localstorage-polyfill';
@@ -21,7 +20,6 @@ function SearchScreen() {
 
   console.log(codes);
 
-  const navigation = useNavigation();
 
   const divisions = [
     {
@@ -110,10 +108,6 @@ function SearchScreen() {
     },
   ];
 
-  // const onCourseAdd = () => {
-  //   navigation.navigate('Search Results');
-  //   // navigation.navigate('Search Results', {divisionCodes: codes, courseCode: courseCode, courseTitle: courseTitle});
-  // };
 
   function _toggleFilter() {
     setFilter(!toggleFilter);
@@ -178,11 +172,13 @@ function SearchScreen() {
         </Pressable>
         <Text style={styles.textSpacer}></Text>
         {Filter()}
-        <View style={toggleFilter ? styles.outerSmall : styles.outerBig}>
-          <SearchResults />
+        <View>
+          <View style={toggleFilter ? styles.outerSmall : styles.outerBig}>
+            <SearchResults />
+          </View>
+          
         </View>
       </View>
-      <View style={styles.bottomContainer}></View>
     </View>
   );
 

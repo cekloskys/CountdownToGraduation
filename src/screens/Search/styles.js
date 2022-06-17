@@ -50,11 +50,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  customCourseButton: {
+    backgroundColor: 'red',
+    position: 'relative',
+    width: '20%',
+    height: 50,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    alignSelf: 'center'
+  },
+  customCourseButtonText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+    alignSelf: 'center',
+  },
   bottomContainer: {
     width: '100%',
-    height: 50,
+    height: 60,
     position: 'absolute',
-    bottom: 10,
+    bottom: 50,
   },
   newCourseContainer: {
     top: 10,
@@ -122,7 +139,7 @@ const styles = StyleSheet.create({
     height: '84%',
   },
   outerSmall: {
-    height: '66%',
+    height: '71.55%',
   },
 });
 

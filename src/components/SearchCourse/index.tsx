@@ -17,7 +17,7 @@ const SearchCourse = ({course}: ResultsProps) => {
   const [divisionCode, setDivisionCode] = useState('');
   const [courseCode, setCourseCode] = useState('');
   const [courseTitle, setTitle] = useState('');
-  const [credits, setCredits] = useState('');
+  const [credits, setCredits] = useState(0);
 
   useEffect(() => {
     if (!course) {return}

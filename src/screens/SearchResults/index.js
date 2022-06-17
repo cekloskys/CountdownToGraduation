@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Text, View, FlatList, Alert } from 'react-native';
+import {Text, View, FlatList, Alert, Pressable } from 'react-native';
 import styles from './styles';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
@@ -61,6 +61,9 @@ function SearchResults() {
   // const divisionCodes = route.params.divisionCodes;
   // const courseTitle = route.params.courseTitle
 
+  const navigation = useNavigation();
+
+
   const divisionCodes = JSON.parse(localStorage.getItem('division'))
   const courseCode = localStorage.getItem('code')
   const courseTitle = localStorage.getItem('title')
@@ -68,6 +71,16 @@ function SearchResults() {
   console.log(divisionCodes);
   console.log(courseCode);
   console.log(courseTitle);
+
+  
+  const addCustomCourse = () => {
+    const post = {
+      courseCode: '',
+      courseTitle: '',
+      credits: '',
+    };
+    navigation.navigate('New Course', {post: post});
+  };
 
   const [results, setResults] = useState([]);
 
@@ -77,28 +90,32 @@ function SearchResults() {
   //console.log(data);
   useEffect(() => {
     if (error) {
+      console.log(error.stack);
       Alert.alert('Error fetching courses!', error.message);
     }
   }, [error]);
 
   useEffect(() => {
     //  console.log('Testing');
-    //console.log(data);
+    console.log(data);
     if (data) {    
       setResults(data.coursesBy);
     }
   }, [data]);
-  console.log(data);
-  
-    return (
-      <View>
-        <FlatList
-            data={results}
-            renderItem={({item}) => <SearchCourse course={item}/>}
-            style={styles.outer}
-        />
-      </View>
-    );
+
+  return (
+    <View>
+      <FlatList
+        data={results}
+        renderItem={({item}) => <SearchCourse course={item}/>}
+        style={styles.outer}
+      />
+      <Text style={styles.customCourseButtonText}>Dont See The Course Your Looking For Add Your Own</Text>
+      <Pressable style={styles.customCourseButton} onPress={addCustomCourse}>
+        <Text style={styles.filterButtonText}>Custom Course</Text>
+      </Pressable>
+    </View>
+  )
   
 };
 function SearchResultsScreen() {

@@ -9,10 +9,10 @@ import { setContext } from '@apollo/client/link/context';
 import {AsyncStorage} from 'react-native';
 
 const URI = 'http://localhost:4000/';
-const androidURI = 'http://172.20.224.1:4000/';
+const androidURI = 'https://tempapolloserver.herokuapp.com/';
 
 const httpLink = createHttpLink({
-    uri: URI,
+    uri: androidURI,
 });
 
 const authLink = setContext(async (_, { headers }) => {

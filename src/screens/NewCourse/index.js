@@ -126,6 +126,7 @@ const NewCourseScreen = props => {
               onChangeText={value => setCode(value)}
               style={styles.codeInput}
               clearButtonMode={'while-editing'}
+              placeholder={'Enter Course Code'}
               maxLength={10}
           />
           <TextInput
@@ -133,6 +134,7 @@ const NewCourseScreen = props => {
               onChangeText={value => setName(value)}
               style={styles.nameInput}
               clearButtonMode={'while-editing'}
+              placeholder={'Enter Course Title'}
           />
           <TextInput
               value={credits.toString()}
@@ -140,6 +142,7 @@ const NewCourseScreen = props => {
               style={styles.semesterInput}
               clearButtonMode={'while-editing'}
               maxLength={11}
+              placeholder={'Enter Number of Credits'}
           />
           <SelectBox
               label="Designators ..."
