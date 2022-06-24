@@ -11,6 +11,7 @@ function SearchScreen() {
   const [courseTitle, setCourseTitle] = useState('');
   const [selectedDivisionCodes, setSelectedDivisionCodes] = useState([]);
   const [toggleFilter, setFilter] = useState(false);
+  console.log(toggleFilter);
 
   const codes = [];
 
@@ -19,7 +20,6 @@ function SearchScreen() {
   });
 
   console.log(codes);
-
 
   const divisions = [
     {
@@ -108,14 +108,23 @@ function SearchScreen() {
     },
   ];
 
+  localStorage.setItem('division', JSON.stringify(codes));
+  localStorage.setItem('title', courseTitle);
+  localStorage.setItem('code', courseCode);
 
-  function _toggleFilter() {
-    setFilter(!toggleFilter);
-  }
-
-  function Filter() {
-    if (toggleFilter) {
-      return (
+  return (
+    <View style={styles.container}>
+      <View style={styles.newCourseContainer}>
+        <TextInput
+          autoCapitalize={'none'}
+          value={courseTitle}
+          onChangeText={value => setCourseTitle(value)}
+          style={styles.codeInput}
+          placeholder={'Title'}
+          placeholderTextColor={'grey'}
+          clearButtonMode={'while-editing'}
+          maxLength={25}
+        />
         <View>
           <TextInput
             autoCapitalize={'characters'}
@@ -144,39 +153,8 @@ function SearchScreen() {
             containerStyle={styles.containerStyle}
           />
         </View>
-      );
-    } else {
-      return null;
-    }
-  }
-
-  localStorage.setItem('division', JSON.stringify(codes));
-  localStorage.setItem('title', courseTitle);
-  localStorage.setItem('code', courseCode);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.newCourseContainer}>
-        <TextInput
-          autoCapitalize={'none'}
-          value={courseTitle}
-          onChangeText={value => setCourseTitle(value)}
-          style={styles.codeInput}
-          placeholder={'Title'}
-          placeholderTextColor={'grey'}
-          clearButtonMode={'while-editing'}
-          maxLength={10}
-        />
-        <Pressable style={styles.filterButton} onPress={_toggleFilter}>
-          <Text style={styles.filterButtonText}>Filter</Text>
-        </Pressable>
-        <Text style={styles.textSpacer}></Text>
-        {Filter()}
-        <View>
-          <View style={toggleFilter ? styles.outerSmall : styles.outerBig}>
-            <SearchResults />
-          </View>
-          
+        <View style={styles.outerSmall}>
+          <SearchResults />
         </View>
       </View>
     </View>

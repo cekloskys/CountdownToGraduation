@@ -45,7 +45,6 @@ const SearchCourse = ({course}: ResultsProps) => {
               ? `${courseTitle}`
               : `${courseTitle.substring(0, 28)}...`}
           </Text>
-          <Text style={styles.designator}>{divisionCode}</Text>
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.credits}>{credits} cr.</Text>

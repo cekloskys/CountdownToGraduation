@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ImageBackground, Pressable, SafeAreaView } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  ImageBackground,
+  Pressable,
+  SafeAreaView,
+} from 'react-native';
 import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import { openDatabase } from 'react-native-sqlite-storage';
+import {useNavigation} from '@react-navigation/native';
+import {openDatabase} from 'react-native-sqlite-storage';
 
 const database = require('../../components/Handlers/database.js');
 
 const tableName = 'courses';
 
-const courseDB = openDatabase({ name: 'CourseList.db' });
+const courseDB = openDatabase({name: 'CourseList.db'});
 
 const HomeScreen = props => {
   const [allCourses, setAllCourses] = useState([]);
@@ -20,14 +26,23 @@ const HomeScreen = props => {
         `SELECT * FROM ${tableName} WHERE status IN ('Complete')`,
         [],
         (sqlTxn, res) => {
-          console.log("Courses retrieved successfully");
+          console.log('Courses retrieved successfully');
           let len = res.rows.length;
           // console.warn(len)
           if (len >= 0) {
             let results = [];
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
-              results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, semester: item.semester, status: item.status, designator: item.designator, cnt: item.cnt });
+              results.push({
+                id: item.id,
+                code: item.code,
+                name: item.name,
+                credits: item.credits,
+                semester: item.semester,
+                status: item.status,
+                designator: item.designator,
+                cnt: item.cnt,
+              });
               // console.log(results[i])
             }
             setAllCourses(results);
@@ -36,11 +51,11 @@ const HomeScreen = props => {
           }
         },
         error => {
-          console.log("error on getting courses " + error.message);
+          console.log('error on getting courses ' + error.message);
         },
       );
     });
-  }
+  };
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getAllCourses();
@@ -50,9 +65,9 @@ const HomeScreen = props => {
 
   let credits = 0;
   for (let i = 0; i < allCourses.length; i++) {
-      if (allCourses[i].cnt === 1) {
-          credits += allCourses[i].credits;
-      }
+    if (allCourses[i].cnt === 1) {
+      credits += allCourses[i].credits;
+    }
   }
 
   useEffect(async () => {
@@ -62,21 +77,22 @@ const HomeScreen = props => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-
-
       <ImageBackground
         source={require('../../../assets/images/griffin_background_small.jpg')}
-        style={styles.image}>
-      </ImageBackground>
-      <SafeAreaView style={{ flex: 0.0 }}></SafeAreaView>
+        style={styles.image}
+      />
+      <SafeAreaView style={{flex: 0.0}} />
       <View style={styles.header}>
-        <Text style={styles.title}>Countdown to Graduation
-          <Text style={styles.school}>{"\n"}Chestnut Hill College</Text></Text>
-
+        <Text style={styles.title}>
+          Countdown to Graduation
+          <Text style={styles.school}>{'\n'}Chestnut Hill College</Text>
+        </Text>
       </View>
       {/* Button */}
       <View style={styles.bottomContainer}>
-        <Text style={styles.countdown}>{(credits > 120) ? 0 : 120 - credits} credits until my graduation.</Text>
+        <Text style={styles.countdown}>
+          {credits > 120 ? 0 : 120 - credits} credits until my graduation.
+        </Text>
         <Pressable
           style={styles.searchButton}
           onPress={() => navigation.navigate('Get started!')}>

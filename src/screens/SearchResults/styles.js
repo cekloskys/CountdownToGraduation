@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   completeContainer: {
@@ -8,33 +8,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 10,
   },
-  text:{
-    justifyContent: 'center'
+  text: {
+    justifyContent: 'center',
   },
-  
   filterButtonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
   },
-  customCourseButton: {
+  searchButton: {
     backgroundColor: 'red',
-    position: 'relative',
-    width: '20%',
     height: 50,
-    borderRadius: 50,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    alignSelf: 'center'
+    marginTop: 5,
   },
-  customCourseButtonText: {
-    color: 'black',
+  searchButtonText: {
+    fontSize: 16,
+    color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
-    alignSelf: 'center',
   },
-  
 });
 
 export default styles;

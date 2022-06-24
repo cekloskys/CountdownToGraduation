@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: "10%",
-    alignSelf: 'center'
+    marginTop: '10%',
+    alignSelf: 'center',
   },
   filterButtonText: {
     color: 'white',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   customCourseButtonText: {
     color: 'black',
@@ -111,8 +111,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 18,
   },
-  dropDownStyle: {
-  },
+  dropDownStyle: {},
   dropDownRowStyle: {
     borderBottomColor: '#C5C5C5',
   },
@@ -123,23 +122,24 @@ const styles = StyleSheet.create({
   multiOptionContainerStyle: {
     backgroundColor: 'red',
   },
-  multiOptionsLabelStyle : {
+  multiOptionsLabelStyle: {
     fontSize: 16,
   },
-  labelStyle : {
+  labelStyle: {
     fontSize: 16,
   },
-  containerStyle : {
+  containerStyle: {
     marginBottom: 5,
   },
   textSpacer: {
-    marginBottom:40
+    marginBottom: 40,
   },
   outerBig: {
     height: '84%',
   },
   outerSmall: {
     height: '71.55%',
+    width: '100%',
   },
 });
 
