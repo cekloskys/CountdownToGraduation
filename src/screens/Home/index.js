@@ -78,6 +78,9 @@ const HomeScreen = props => {
       <View style={styles.bottomContainer}>
         <Text style={styles.countdown}>{(credits > 120) ? 0 : 120 - credits} credits until my graduation.</Text>
         <Pressable
+            accessible={true}
+            accessibilityRole={"button"}
+
           style={styles.searchButton}
           onPress={() => navigation.navigate('Get started!')}>
           <AntDesign name="user" size={25} color={'#f15454'} />

@@ -9,6 +9,8 @@ const NewCourseButton = props => {
 
   return (
     <TouchableOpacity
+        accessibilityHint={"Create a new course"}
+        accessibilityRole={"button"}
       style={styles.button}
       onPress={() => navigation.navigate('New Course')}>
       <Ionicons name={'add'} size={30} color={'white'} />

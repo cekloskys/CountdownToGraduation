@@ -5,27 +5,34 @@ import Course from '../../components/Course';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import CourseSectionList from "../../components/SectionList";
-
-
 
 const tableName = 'courses';
 
 const courseDB = openDatabase({ name: 'CourseList.db' });
 
-
-
-const AllScreen = props => {
-  /*const [completeCourses, setCompleteCourses] = useState([]);
+const CourseSectionList = props => {
+  const designator = props;
+  const [completeCourses, setCompleteCourses] = useState([]);
   const [inProgressCourses, setInProgressCourses] = useState([]);
   const [notCompleteCourses, setNotCompleteCourses] = useState([]);
 
   const navigation = useNavigation();
-
+  console.log(designator.designator);
+  console.log(designator.designator === "All");
   const getStatusCourses = (status) => {
+     let query = '';
+     if (designator.designator[0] === "All"){
+       query = `SELECT * FROM ${tableName} WHERE status IN ('${status}')`;
+     }else if (designator.designator[0] === "Core" || designator.designator[0] === "Elective"){
+       query = `SELECT * FROM ${tableName} WHERE status IN ('${status}') AND designator IN ('${designator.designator[0]}')`;
+     }else{
+       query = `SELECT * FROM ${tableName} WHERE status IN ('${status}') AND designator IN ('${designator.designator[0]}','${designator.designator[1]}')`;
+     }
+    console.log(query);
     courseDB.transaction(txn => {
       txn.executeSql(
-        `SELECT * FROM ${tableName} WHERE status IN ('${status}')`,
+        //`SELECT * FROM ${tableName} WHERE status IN ('${status}')`,
+          query,
         [],
         (sqlTxn, res) => {
           console.log("Courses retrieved successfully");
@@ -76,7 +83,9 @@ const AllScreen = props => {
   var complete = 0;
   var inProgress = 0;
   var notComplete = 0;
-  var gpa = 0.0;
+  var gpa = 0.00;
+
+
   for (var i = 0; i < completeCourses.length; i++) {
     if (completeCourses[i].cnt === 1) {
       complete += completeCourses[i].credits;
@@ -134,27 +143,54 @@ const AllScreen = props => {
         gpa += 0.0;
 
     }
+
+  }
+  if(gpa !== 0) {
     gpa /= completeCourses.length;
     gpa = Math.round(gpa * 100) / 100;
   }
 
-  console.log(complete);
   for (var i = 0; i < inProgressCourses.length; i++) {
     if (inProgressCourses[i].cnt === 1) {
       inProgress += inProgressCourses[i].credits;
     }
+    inProgressCourses[i].grade='-';
   }
   for (var i = 0; i < notCompleteCourses.length; i++) {
     if (notCompleteCourses[i].cnt === 1) {
       notComplete += notCompleteCourses[i].credits;
     }
-  }*/
+    notCompleteCourses[i].grade='-';
+  }
   return (
-    <View >
-<CourseSectionList designator={["All"]}/>
-      <NewCourseButton />
-    </View>
+
+      <View>
+        <SectionList style={styles.outer}
+          sections={[
+            { title: 'Courses Complete ' + complete + ' cr.', data: completeCourses },
+            { title: 'Courses In Progress ' + inProgress + ' cr.', data: inProgressCourses },
+            { title: 'Courses Not Complete ' + notComplete + ' cr.', data: notCompleteCourses },
+          ]}
+          renderItem={({ item }) => <Course post={item} />}
+          renderSectionHeader={({ section }) => (
+            <View style={styles.completeContainer}>
+              <View style={{flex: 1}}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{section.title}</Text>
+            </View>
+              {section.title.includes('Courses Complete ') ?
+            <View style={{flex: 1}}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'right', marginRight: 10 }}>{'Gpa: '+ gpa}</Text>
+              </View>
+              :
+                  <Text></Text>
+              }
+            </View>
+          )}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+
   );
 };
 
-export default AllScreen;
+export default CourseSectionList;

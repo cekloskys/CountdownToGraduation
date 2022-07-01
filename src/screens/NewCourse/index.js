@@ -122,13 +122,13 @@ const NewCourseScreen = props => {
     sortedSelectedDesignators.forEach( item => {
       if (i === 0) {
         database
-            .addCourse(code, name, credits.item, semester, status.item, item.item, code, 1)
+            .addCourse(code, name, credits.item, semester, status.item, item.item, code, '-', 1)
             .catch(e => {
               console.log(e);
             });
       } else {
         database
-            .addCourse(code, name, credits.item, semester, status.item, item.item, code, 0)
+            .addCourse(code, name, credits.item, semester, status.item, item.item, code, '-', 0)
             .catch(e => {
               console.log(e);
             });
@@ -156,6 +156,7 @@ const NewCourseScreen = props => {
       <View style={styles.container}>
         <View style={styles.newCourseContainer}>
           <TextInput
+              accessibilityHint={"Course Code"}
               autoCapitalize={'characters'}
               value={code}
               onChangeText={value => setCode(value)}
@@ -166,6 +167,7 @@ const NewCourseScreen = props => {
               maxLength={10}
           />
           <TextInput
+              accessibilityHint={"Course Name"}
               value={name}
               onChangeText={value => setName(value)}
               style={styles.nameInput}
@@ -226,7 +228,10 @@ const NewCourseScreen = props => {
           />
         </View>
         <View style={styles.bottomContainer}>
-          <Pressable style={styles.searchButton} onPress={onCourseAdd}>
+          <Pressable accessible={true}
+                     accessibilityHint={"Add Course"}
+                     accessibilityRole={"button"}
+                     style={styles.searchButton} onPress={onCourseAdd}>
             <Text style={styles.searchButtonText}>Add</Text>
           </Pressable>
         </View>

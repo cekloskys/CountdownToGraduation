@@ -11,7 +11,7 @@ const Course = props => {
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.touchable} onPress={onPress}>
+      <TouchableOpacity accessibilityRole={"button"} style={styles.touchable} onPress={onPress}>
         <View style={{ flex: 2 }}>
           <Text style={styles.code}>{post.code}</Text>
           <Text numberOfLines={1} style={styles.name}>
@@ -22,7 +22,7 @@ const Course = props => {
           <Text style={styles.designator}>{post.designator}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={styles.semester}>{post.semester}</Text>
+          <Text style={styles.semester}>{post.grade}</Text>
           <Text style={styles.credits}>{post.credits} cr.</Text>
         </View>
       </TouchableOpacity>

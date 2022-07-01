@@ -5,6 +5,7 @@ import Course from '../../components/Course';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
+import CourseSectionList from "../../components/SectionList";
 
 
 const database = require('../../components/Handlers/database.js');
@@ -14,6 +15,7 @@ const tableName = 'courses';
 const courseDB = openDatabase({ name: 'CourseList.db' });
 
 const MajorScreen = props => {
+  /*
   const [completeCourses, setCompleteCourses] = useState([]);
   const [inProgressCourses, setInProgressCourses] = useState([]);
   const [notCompleteCourses, setNotCompleteCourses] = useState([]);
@@ -89,26 +91,11 @@ const MajorScreen = props => {
     if (notCompleteCourses[i].cnt === 1) {
       notComplete += notCompleteCourses[i].credits;
     }
-  }
+  }*/
 
   return (
     <View>
-      <View>
-        <SectionList style={styles.outer}
-          sections={[
-            { title: 'Courses Complete ' + complete + ' cr.', data: completeCourses },
-            { title: 'Courses In Progress ' + inProgress + ' cr.', data: inProgressCourses },
-            { title: 'Courses Not Complete ' + notComplete + ' cr.', data: notCompleteCourses },
-          ]}
-          renderItem={({ item }) => <Course post={item} />}
-          renderSectionHeader={({ section }) => (
-            <View style={styles.completeContainer}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{section.title}</Text>
-            </View>
-          )}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
+      <CourseSectionList designator={['2nd Major','1st Major']} />
       <NewCourseButton />
     </View>
   );

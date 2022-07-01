@@ -41,6 +41,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
   },
+  gradeButton: {
+    backgroundColor: 'red',
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    right: 140,
+  },
+  gradeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
   bottomContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -105,8 +121,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 18,
   },
-  dropDownStyle: {
-  },
+  dropDownStyle: {},
   dropDownRowStyle: {
     borderBottomColor: '#C5C5C5',
   },
@@ -117,14 +132,23 @@ const styles = StyleSheet.create({
   multiOptionContainerStyle: {
     backgroundColor: 'red',
   },
-  multiOptionsLabelStyle : {
+  multiOptionsLabelStyle: {
     fontSize: 16,
   },
-  labelStyle : {
+  labelStyle: {
     fontSize: 16,
   },
-  containerStyle : {
+  containerStyle: {
     marginBottom: 5,
+  },
+  textSpacer: {
+    marginBottom: 40
+  },
+  outerBig: {
+    height: '84%',
+  },
+  outerSmall: {
+    height: '66%',
   },
 });
 

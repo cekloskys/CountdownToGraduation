@@ -7,6 +7,8 @@ import SelectDropdown from 'react-native-select-dropdown/src/SelectDropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
+import {value} from "lodash/seq";
+import ExistingCourse from "./index";
 
 const tableName = 'courses';
 
@@ -69,6 +71,57 @@ const ExistingCourseScreen = props => {
   }
   ];
 
+  const gradeLetters = [
+    {
+      id: '1',
+      item: 'A+',
+    },
+    {
+      id: '2',
+      item: 'A',
+    },
+    {
+      id: '3',
+      item: 'A-',
+    },
+    {
+      id: '4',
+      item: 'B+',
+    },
+    {
+      id: '5',
+      item: 'B',
+    },
+    {
+      id: '6',
+      item: 'B-',
+    },
+    {
+      id: '7',
+      item: 'C+',
+    },
+    {
+      id: '8',
+      item: 'C',
+    },
+    {
+      id: '9',
+      item: 'C-',
+    },
+    {
+      id: '10',
+      item: 'D+',
+    },
+    {
+      id: '11',
+      item: 'D',
+    },
+    {
+      id: '12',
+      item: 'F',
+    },
+  ];
+
   let creditId = '';
   let creditItem = '';
   let i;
@@ -105,6 +158,18 @@ const ExistingCourseScreen = props => {
   const newDesignatorId = designatorId;
   const newDesignatorItem = designatorItem;
 
+  let gradeLetterId = '';
+  let gradeLetterItem = '';
+  let l;
+  for (l = 0; l < gradeLetters.length; l++){
+    if (gradeLetters[l].item == post.grade){
+      gradeLetterId = gradeLetters[l].id;
+      gradeLetterItem = gradeLetters[l].item;
+    }
+  }
+  const newGradeId = gradeLetterId;
+  const newGradeItem = gradeLetterItem;
+
   const [code, setCode] = useState(post.code);
   const [name, setName] = useState(post.name);
   const [semester, setSemester] = useState(post.semester);
@@ -114,6 +179,14 @@ const ExistingCourseScreen = props => {
   const [cnt, setCnt] = useState(post.cnt);
   const [selectedDesignators, setSelectedDesignators] = useState([{id: '1', item: '1st Major'}])
   const [relatedCode, setRelatedCode] = useState(post.relatedcode)
+  const [toggleGrade, setGrade] = useState(false);
+  const [selectedGradeLetters, setSelectedGradeLetters] = useState({id: newGradeId, item: newGradeItem});
+  const [grades] = useState('');
+
+
+  function _toggleGrade() {
+    setGrade(!toggleGrade);
+  }
 
   const onCourseUpdate = () => {
     // console.warn(designator);
@@ -148,10 +221,10 @@ const ExistingCourseScreen = props => {
       } else {
         setCnt(1);
       } */
-      // console.log('[DATA]', 'updateCourse: ' + code + name);
+      // console.log('[DATA]', 'updateCourse: ' +  selectedGradeLetters.item);
       courseDB.transaction(txn => {
         txn.executeSql(
-            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', semester = '${semester}', status = '${status.item}', designator = '${designator.item}' WHERE id = ${post.id}`, [],
+            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', semester = '${semester}', status = '${status.item}', designator = '${designator.item}', grade = '${selectedGradeLetters.item}' WHERE id = ${post.id}`, [],
             (sqlTxn, res) => {
               console.log(`${code} updated successfully`);
             },
@@ -169,7 +242,7 @@ const ExistingCourseScreen = props => {
       // console.log('[DATA]', 'updateCourse: ' + code + name);
       courseDB.transaction(txn => {
         txn.executeSql(
-            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', semester = '${semester}', status = '${status.item}' WHERE relatedcode = '${post.code}'`, [],
+            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', semester = '${semester}', status = '${status.item}',  grade = '${selectedGradeLetters.item}' WHERE relatedcode = '${post.code}'`, [],
             (sqlTxn, res) => {
               console.log(`${code} updated successfully`);
             },
@@ -214,7 +287,7 @@ const ExistingCourseScreen = props => {
               console.log(`${code} deleted successfully`);
             },
             error => {
-              console.log("error on deleteing course " + error.message);
+              console.log("error on deleting course " + error.message);
             },
         );
       });
@@ -230,7 +303,7 @@ const ExistingCourseScreen = props => {
               console.log(`${code} deleted successfully`);
             },
             error => {
-              console.log("error on deleteing course " + error.message);
+              console.log("error on deleting course " + error.message);
             },
         );
       });
@@ -270,8 +343,30 @@ const ExistingCourseScreen = props => {
 
 
   };
+  console.log(status);
+console.log(newStatusId);
+  function Grade(){
+    if(status.item === "Complete") {
+        return (
+            <SelectBox
+                label="Grade Letters ..."
+                options={gradeLetters}
+                value={selectedGradeLetters}
+                onChange={onChangeGrades()}
+                hideInputFilter={true}
+                arrowIconColor={'grey'}
+                searchIconColor={'grey'}
+                toggleIconColor={'grey'}
+                optionsLabelStyle={styles.multiOptionsLabelStyle}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerStyle}
+            />
+        );
 
-
+      } else {
+        return null;
+      }
+  }
 
 
   // console.warn("[DBUG]", credits);
@@ -348,6 +443,8 @@ const ExistingCourseScreen = props => {
               labelStyle={styles.labelStyle}
               containerStyle={styles.containerStyle}
           />
+          {Grade()}
+
         </View>
         <View style={styles.bottomContainer}>
           <Pressable style={styles.searchButtonUpdate} onPress={onCourseUpdate}>
@@ -358,10 +455,16 @@ const ExistingCourseScreen = props => {
           </Pressable>
         </View>
       </View>
+
   );
+
 
   function onChange() {
     return (val) => setStatus(val)
+  }
+
+  function onChangeGrades(){
+     return (val) => setSelectedGradeLetters(val)
   }
 
   function onChangeCredits() {
@@ -370,6 +473,10 @@ const ExistingCourseScreen = props => {
 
   function onChangeDesignator() {
     return (val) => setDesignator(val)
+  }
+  function onMultiChange() {
+    return item =>
+        setSelectedGradeLetters(xorBy(selectedGradeLetters, [item], 'id'));
   }
 };
 
