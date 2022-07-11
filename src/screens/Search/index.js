@@ -1,17 +1,45 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, Pressable, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, Pressable, StyleSheet, Alert} from 'react-native';
 import styles from './styles';
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy, sortBy} from 'lodash';
 import 'localstorage-polyfill';
 import SearchResults from '../SearchResults';
+import {useQuery, gql} from '@apollo/client';
+import 'localstorage-polyfill';
+
+const GET_DIVISIONS = gql`
+  query Divisions {
+    divisions {
+      code
+      name
+    }
+  }
+`;
 
 function SearchScreen() {
   const [courseCode, setCourseCode] = useState('');
   const [courseTitle, setCourseTitle] = useState('');
   const [selectedDivisionCodes, setSelectedDivisionCodes] = useState([]);
   const [toggleFilter, setFilter] = useState(false);
+  const [divisions, setDivisions] = useState([])
   console.log(toggleFilter);
+
+  const {data, error, loading} = useQuery(GET_DIVISIONS)
+
+  useEffect(() => {
+    if (error) {
+      console.log(error.stack);
+      Alert.alert('Error fetching Divisions!', error.message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    console.log(data);
+    if (data) { 
+      setDivisions(data.divisions);
+    }
+  }, [data]);
 
   const codes = [];
 
@@ -21,92 +49,12 @@ function SearchScreen() {
 
   console.log(codes);
 
-  const divisions = [
-    {
-      id: 'AH',
-      item: 'Art History',
-    },
-    {
-      id: 'AS',
-      item: 'Art',
-    },
-    {
-      id: 'BI',
-      item: 'Biology',
-    },
-    {
-      id: 'BU',
-      item: 'Business',
-    },
-    {
-      id: 'CH',
-      item: 'Chemistry',
-    },
-    {
-      id: 'CO',
-      item: 'Communication',
-    },
-    {
-      id: 'CS',
-      item: 'Computer Science',
-    },
-    {
-      id: 'ED',
-      item: 'Education',
-    },
-    {
-      id: 'EN',
-      item: 'English',
-    },
-    {
-      id: 'FA',
-      item: 'Music',
-    },
-    {
-      id: 'FL',
-      item: 'Foreign Language ',
-    },
-    {
-      id: 'GL',
-      item: 'Global Awarness',
-    },
-    {
-      id: 'HP',
-      item: 'History',
-    },
-    {
-      id: 'ID',
-      item: 'Honor',
-    },
-    {
-      id: 'IL',
-      item: 'Liberal Arts',
-    },
-    {
-      id: 'MA',
-      item: 'Math',
-    },
-    {
-      id: 'PE',
-      item: 'Health/Exercise Science',
-    },
-    {
-      id: 'PO',
-      item: 'Politics',
-    },
-    {
-      id: 'PS',
-      item: 'Psycology',
-    },
-    {
-      id: 'RS',
-      item: 'Religion/Philosophy',
-    },
-    {
-      id: 'SO',
-      item: 'Public Service',
-    },
-  ];
+  const  mappedDivisions = divisions.map(division => {
+    return {
+      id: division.code,
+      item: division.name
+    }
+  })
 
   localStorage.setItem('division', JSON.stringify(codes));
   localStorage.setItem('title', courseTitle);
@@ -138,7 +86,7 @@ function SearchScreen() {
           />
           <SelectBox
             label="Division Codes ..."
-            options={divisions}
+            options={mappedDivisions}
             selectedValues={selectedDivisionCodes}
             onMultiSelect={onMultiChange()}
             onTapClose={onMultiChange()}

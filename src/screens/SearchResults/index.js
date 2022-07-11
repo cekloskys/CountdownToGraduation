@@ -97,6 +97,7 @@ function SearchResults() {
       courseCode: courseCode,
       courseTitle: courseTitle,
     },
+    fetchPolicy: 'cache-first'
   });
   //console.log(data);
   useEffect(() => {
@@ -107,8 +108,6 @@ function SearchResults() {
   }, [error]);
 
   useEffect(() => {
-    //  console.log('Testing');
-    console.log(data);
     if (data) {
       setResults(data.coursesBy);
     }
