@@ -19,7 +19,7 @@ const COLORS = {primary: '#f15454', white: '#fff'};
 const slides = [
     {
         id: '1',
-        image: require('../../images/image1.png'),
+        image: require('../../images/Countdown-Screenshot-2.png'),
         title: 'Keep track from anywhere',
         subtitle: 'Countdown to Graduation will help you keep track of your ' +
             'courses, credits, and gpa anywhere with screens to see just your major, ' +
@@ -29,7 +29,7 @@ const slides = [
     },
     {
         id: '2',
-        image: require('../../images/image2.png'),
+        image: require('../../images/Countdown-Screenshot.png'),
         title: 'Search for courses',
         subtitle: 'Easily search through Chestnut Hill College\'s course catalog for the courses you\'re taking.' +
             '  It\'s ok if you don\'t know the exact name of a course.  ' +
@@ -37,7 +37,7 @@ const slides = [
     },
     {
         id: '3',
-        image: require('../../images/image3.png'),
+        image: require('../../images/Countdown-Screenshot-3.png'),
         title: 'Save and edit courses',
         subtitle: 'Save your courses and make changes to them whenever you need.  ' +
             'Then, check your gpa and countdown your credits until your graduation.'

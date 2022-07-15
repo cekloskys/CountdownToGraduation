@@ -12,7 +12,7 @@ const NewCourseButton = props => {
         accessibilityHint={"Create a new course"}
         accessibilityRole={"button"}
       style={styles.button}
-      onPress={() => navigation.navigate('New Course')}>
+      onPress={() => navigation.navigate('Search')}>
       <Ionicons name={'add'} size={30} color={'white'} />
     </TouchableOpacity>
   );

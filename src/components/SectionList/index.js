@@ -16,6 +16,7 @@ const CourseSectionList = props => {
   const [inProgressCourses, setInProgressCourses] = useState([]);
   const [notCompleteCourses, setNotCompleteCourses] = useState([]);
 
+
   const navigation = useNavigation();
   console.log(designator.designator);
   console.log(designator.designator === "All");
@@ -43,7 +44,7 @@ const CourseSectionList = props => {
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
               console.log("testing" + item);
-              results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, semester: item.semester, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, cnt: item.cnt });
+              results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, semester: item.semester, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, creditTypeCode: item.creditTypeCode, cnt: item.cnt });
                console.log(results[i])
             }
             if (status == "Complete") {
@@ -56,7 +57,6 @@ const CourseSectionList = props => {
               setNotCompleteCourses(results);
             }
 
-            // console.warn('[DATA]', results[0])
           }
         },
         error => {
@@ -84,69 +84,69 @@ const CourseSectionList = props => {
   var inProgress = 0;
   var notComplete = 0;
   var gpa = 0.00;
-
+  var completeCoursesCtr = 0;
 
   for (var i = 0; i < completeCourses.length; i++) {
-    if (completeCourses[i].cnt === 1) {
+    if (completeCourses[i].cnt === 1 && completeCourses[i].credits > 0) {
+      completeCoursesCtr++;
       complete += completeCourses[i].credits;
+      switch (completeCourses[i].grade) {
+        case "A+":
+          gpa += 4.0;
+          break;
+
+        case "A":
+          gpa += 4.0;
+          break;
+
+        case "A-":
+          gpa += 3.67;
+          break;
+
+        case "B+":
+          gpa += 3.33;
+          break;
+
+        case "B":
+          gpa += 3.0;
+          break;
+
+        case "B-":
+          gpa += 2.67;
+          break;
+
+        case "C+":
+          gpa += 2.33;
+          break;
+
+        case "C":
+          gpa += 2.0;
+          break;
+
+        case "C-":
+          gpa += 1.67;
+          break;
+
+        case "D+":
+          gpa += 1.33;
+          break;
+
+        case "D":
+          gpa += 1.0;
+          break;
+
+        case "D-":
+          gpa += 0.67;
+          break;
+
+        case "F":
+          gpa += 0.0;
+
+      }
     }
-    switch (completeCourses[i].grade) {
-      case "A+":
-        gpa += 4.0;
-        break;
-
-      case "A":
-        gpa += 4.0;
-        break;
-
-      case "A-":
-        gpa += 3.67;
-        break;
-
-      case "B+":
-        gpa += 3.33;
-        break;
-
-      case "B":
-        gpa += 3.0;
-        break;
-
-      case "B-":
-        gpa += 2.67;
-        break;
-
-      case "C+":
-        gpa += 2.33;
-        break;
-
-      case "C":
-        gpa += 2.0;
-        break;
-
-      case "C-":
-        gpa += 1.67;
-        break;
-
-      case "D+":
-        gpa += 1.33;
-        break;
-
-      case "D":
-        gpa += 1.0;
-        break;
-
-      case "D-":
-        gpa += 0.67;
-        break;
-
-      case "F":
-        gpa += 0.0;
-
-    }
-
   }
   if(gpa !== 0) {
-    gpa /= completeCourses.length;
+    gpa /= completeCoursesCtr;
     gpa = Math.round(gpa * 100) / 100;
   }
 

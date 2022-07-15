@@ -14,12 +14,12 @@ module.exports = {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     code VARCHAR(10),
                     name VARCHAR(64),
-                    semester VARCHAR(10),
                     credits INTEGER,
                     status VARCHAR(15),
                     designator VARCHAR(20),
                     relatedcode VARCHAR(10),
                     grade VARCHAR(2),
+                    creditTypeCode VARCHAR(2),
                     cnt INTEGER
                 );`,
                 [],
@@ -50,7 +50,7 @@ module.exports = {
                         let results = [];
                         for (let i = 0; i < len; i++) {
                             let item = res.rows.item(i);
-                            results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, semester: item.semester, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, cnt: item.cnt });
+                            results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, creditTypeCode: item.creditTypeCode, cnt: item.cnt });
                             console.log(results[i])
                         }
                         // console.warn('[DATA]', results[0])
@@ -86,11 +86,11 @@ module.exports = {
         }
     },
 
-    addCourse: async function (code, name, credits, semester, status, designator, relatedcode, grade, cnt) {
+    addCourse: async function (code, name, credits, status, designator, relatedcode, grade, creditTypeCode, cnt) {
         // console.log('[DATA]', 'addCourse: ' + code + name);
         courseDB.transaction(txn => {
             txn.executeSql(
-                `INSERT INTO ${tableName} (code, name, credits, semester, status, designator, relatedcode, grade, cnt) VALUES ("${code}", "${name}", ${credits}, "${semester}", "${status}", "${designator}", "${relatedcode}","${grade}", "${cnt}")`, [],
+                `INSERT INTO ${tableName} (code, name, credits, status, designator, relatedcode, grade, creditTypeCode, cnt) VALUES ("${code}", "${name}", ${credits}, "${status}", "${designator}", "${relatedcode}","${grade}","${creditTypeCode}", "${cnt}")`, [],
                 (sqlTxn, res) => {
                     console.log(`${code} added successfully`);
                 },

@@ -14,30 +14,45 @@ const tableName = 'courses';
 
 const courseDB = openDatabase({ name: 'CourseList.db' });
 
-
 const ExistingCourseScreen = props => {
 
   const navigation = useNavigation();
 
   const post = props.route.params.post;
-  // console.log(post);
+  console.log(post);
 
   //const statuses = ['Complete', 'In Progress', 'Not Complete'];
   //const designators = ['1st Major', '2nd Major', '1st Minor', '2nd Minor', 'Core', 'Elective']
 
   const credit = [{
     id: '1',
-    item: '1'
+    item: '0'
   }, {
     id: '2',
-    item: '2'
+    item: '0.5'
   }, {
     id: '3',
-    item: '3'
+    item: '1'
   }, {
     id: '4',
+    item: '1.5'
+  }, {
+    id: '5',
+    item: '2'
+  }, {
+    id: '6',
+    item: '3'
+  },{
+    id: '7',
     item: '4'
+  }, {
+    id: '8',
+    item: '5'
+  }, {
+    id: '9',
+    item: '9'
   },
+
   ];
   const statuses = [{
     id: '1',
@@ -122,6 +137,17 @@ const ExistingCourseScreen = props => {
     },
   ];
 
+  const passFail = [
+    {
+      id: '1',
+      item: 'P',
+    },
+    {
+      id: '2',
+      item: 'F',
+    },
+  ];
+
   let creditId = '';
   let creditItem = '';
   let i;
@@ -172,7 +198,6 @@ const ExistingCourseScreen = props => {
 
   const [code, setCode] = useState(post.code);
   const [name, setName] = useState(post.name);
-  const [semester, setSemester] = useState(post.semester);
   const [credits, setCredits] = useState({id: newCreditId, item: newCreditItem});
   const [status, setStatus] = useState({id: newStatusId, item: newStatusItem});
   const [designator, setDesignator] = useState({id: newDesignatorId, item: newDesignatorItem});
@@ -180,8 +205,10 @@ const ExistingCourseScreen = props => {
   const [selectedDesignators, setSelectedDesignators] = useState([{id: '1', item: '1st Major'}])
   const [relatedCode, setRelatedCode] = useState(post.relatedcode)
   const [toggleGrade, setGrade] = useState(false);
-  const [selectedGradeLetters, setSelectedGradeLetters] = useState({id: newGradeId, item: newGradeItem});
+  const [selectedGradeLetters, setSelectedGradeLetters] = useState([]);
   const [grades] = useState('');
+  const [selectedPassFail, setSelectedPassFail] = useState([]);
+  const [creditTypeCode, setCreditTypeCode] = useState(post.creditTypeCode);
 
 
   function _toggleGrade() {
@@ -198,10 +225,6 @@ const ExistingCourseScreen = props => {
       alert('Please fill in Course Name');
       return;
     }
-    if (!semester) {
-      alert('Please fill in Semester');
-      return;
-    }
     if (!designator) {
       alert('Please select a Designator');
       return;
@@ -214,7 +237,10 @@ const ExistingCourseScreen = props => {
       alert('Please select a Status');
       return;
     }
-
+    if (status.item==="Complete" && creditTypeCode ==="CR" && (!selectedGradeLetters || selectedGradeLetters.length ===0)) {
+      alert('Please select a Grade');
+      return;
+    }
     const updateCourse = () => {
       /* if (status.item === 'In Progress' || status.item === 'Not Complete'){
         setCnt(0);
@@ -222,9 +248,15 @@ const ExistingCourseScreen = props => {
         setCnt(1);
       } */
       // console.log('[DATA]', 'updateCourse: ' +  selectedGradeLetters.item);
+      let grade = '';
+      if(creditTypeCode ==="PF") {
+        grade = selectedPassFail.item
+      }else{
+        grade = selectedGradeLetters.item
+      }
       courseDB.transaction(txn => {
         txn.executeSql(
-            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', semester = '${semester}', status = '${status.item}', designator = '${designator.item}', grade = '${selectedGradeLetters.item}' WHERE id = ${post.id}`, [],
+            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', status = '${status.item}', designator = '${designator.item}', grade = '${grade}', creditTypeCode ='${creditTypeCode}' WHERE id = ${post.id}`, [],
             (sqlTxn, res) => {
               console.log(`${code} updated successfully`);
             },
@@ -239,10 +271,16 @@ const ExistingCourseScreen = props => {
     // alert('Course Updated!');
 
     const updateRelatedCourses = () => {
+      let grade = '';
+      if(creditTypeCode ==="PF") {
+        grade = selectedPassFail.item
+      }else{
+        grade = selectedGradeLetters.item
+      }
       // console.log('[DATA]', 'updateCourse: ' + code + name);
       courseDB.transaction(txn => {
         txn.executeSql(
-            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', semester = '${semester}', status = '${status.item}',  grade = '${selectedGradeLetters.item}' WHERE relatedcode = '${post.code}'`, [],
+            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', status = '${status.item}',  grade = '${grade}', creditTypeCode = '${creditTypeCode}' WHERE relatedcode = '${post.code}'`, [],
             (sqlTxn, res) => {
               console.log(`${code} updated successfully`);
             },
@@ -345,11 +383,13 @@ const ExistingCourseScreen = props => {
   };
   console.log(status);
 console.log(newStatusId);
+  console.log(creditTypeCode, "Hi");
   function Grade(){
     if(status.item === "Complete") {
+      if(creditTypeCode==="CR") {
         return (
             <SelectBox
-                label="Grade Letters ..."
+                label="Grade ..."
                 options={gradeLetters}
                 value={selectedGradeLetters}
                 onChange={onChangeGrades()}
@@ -362,10 +402,27 @@ console.log(newStatusId);
                 containerStyle={styles.containerStyle}
             />
         );
-
-      } else {
-        return null;
+      }else if(creditTypeCode ==="PF"){
+        return (
+            <SelectBox
+                label="Grade ..."
+                options={passFail}
+                value={selectedPassFail}
+                onChange={onChangePassFail()}
+                hideInputFilter={true}
+                arrowIconColor={'grey'}
+                searchIconColor={'grey'}
+                toggleIconColor={'grey'}
+                optionsLabelStyle={styles.multiOptionsLabelStyle}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerStyle}
+            />
+        );
       }
+
+    } else {
+      return null;
+    }
   }
 
 
@@ -393,15 +450,7 @@ console.log(newStatusId);
               placeholder={'Name'}
               placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
-          />
-          <TextInput
-              value={semester}
-              onChangeText={value => setSemester(value)}
-              style={styles.semesterInput}
-              placeholder={'Semester'}
-              placeholderTextColor={'grey'}
-              clearButtonMode={'while-editing'}
-              maxLength={11}
+              
           />
           <SelectBox
               label="Designator ..."
@@ -477,6 +526,9 @@ console.log(newStatusId);
   function onMultiChange() {
     return item =>
         setSelectedGradeLetters(xorBy(selectedGradeLetters, [item], 'id'));
+  }
+  function onChangePassFail(){
+    return (val) => setSelectedPassFail(val);
   }
 };
 
