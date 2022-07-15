@@ -49,7 +49,7 @@ const App = () => {
     }
   }, []);
   return (
-     /* isAppFirstLaunched != null && (
+      isAppFirstLaunched != null && (
           <ApolloProvider client={client}>
           <NavigationContainer>
             <Stack.Navigator  >
@@ -66,9 +66,7 @@ const App = () => {
           </NavigationContainer>
           </ApolloProvider>
       )
-);*/
-  <Router></Router>
-  );
+);
 };
 
 export default App;
