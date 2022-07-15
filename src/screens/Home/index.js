@@ -41,6 +41,8 @@ const HomeScreen = props => {
                 semester: item.semester,
                 status: item.status,
                 designator: item.designator,
+                grade: item.grade,
+                creditTypeCode: item.creditTypeCode,
                 cnt: item.cnt,
               });
               // console.log(results[i])
