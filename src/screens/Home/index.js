@@ -10,6 +10,28 @@ import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import {openDatabase} from 'react-native-sqlite-storage';
+import {useQuery, gql} from '@apollo/client';
+import 'localstorage-polyfill';
+
+const MY_COURSES_BY = gql`
+  query CoursesBy(
+    $divisionCodes: [String]
+    $courseCode: String
+    $courseTitle: String
+  ) {
+    coursesBy(
+      divisionCodes: $divisionCodes
+      courseCode: $courseCode
+      courseTitle: $courseTitle
+    ) {
+      divisionCode
+      courseCode
+      courseTitle
+      credits
+      creditTypeCode
+    }
+  }
+`;
 
 const database = require('../../components/Handlers/database.js');
 
@@ -19,6 +41,13 @@ const courseDB = openDatabase({name: 'CourseList.db'});
 
 const HomeScreen = props => {
   const [allCourses, setAllCourses] = useState([]);
+
+  const {data, __, ___} = useQuery(MY_COURSES_BY, {
+    variables: {divisionCodes: []},
+    fetchPolicy: 'network-only',
+    errorPolicy: 'ignore'
+  });
+  console.log(data);
 
   const getAllCourses = () => {
     courseDB.transaction(txn => {

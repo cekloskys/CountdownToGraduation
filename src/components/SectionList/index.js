@@ -43,7 +43,6 @@ const CourseSectionList = props => {
             let results = [];
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
-              console.log("testing" + item);
               results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, semester: item.semester, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, creditTypeCode: item.creditTypeCode, cnt: item.cnt });
                console.log(results[i])
             }

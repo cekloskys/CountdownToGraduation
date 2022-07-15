@@ -10,6 +10,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import Router from './src/navigation/Router';
 import {AsyncStorage, LogBox} from 'react-native';
+import 'localstorage-polyfill';
 LogBox.ignoreLogs(['Reanimated 2']);
 import { StatusBar } from 'react-native';
 import {createStackNavigator} from "@react-navigation/stack";
@@ -40,10 +41,12 @@ const App = () => {
 
   const [isAppFirstLaunched, setIsAppFirstLaunched] = React.useState(null);
   React.useEffect(async () => {
-    const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+   // const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+    const appData = localStorage.getItem('isAppFirstLaunched');
     if(appData == null){
       setIsAppFirstLaunched(true);
-      AsyncStorage.setItem('isAppFirstLaunched', 'false')
+      //AsyncStorage.setItem('isAppFirstLaunched', 'false')
+      localStorage.setItem('isAppFirstLaunched', 'false')
     }else{
       setIsAppFirstLaunched(false);
     }
