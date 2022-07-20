@@ -47,7 +47,7 @@ const slides = [
 const Slide = ({item}) => {
     return  (
         <View style={{alignItems: 'center'}}>
-            <Image source={item.image} style={{height: '65%', width, resizeMode: 'contain'}}/>
+            <Image source={item.image} style={{height: '55%', width, resizeMode: 'contain'}}/>
             <View>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>{item.subtitle}</Text>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     subtitle:{
         color: COLORS.white,
-        fontSize: 13,
+        fontSize: 15.6,
         maxWidth: '70%',
         marginTop: 10,
         textAlign: 'center',
