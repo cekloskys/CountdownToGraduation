@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, Pressable, StyleSheet, Alert} from 'react-native';
+import {View, Text, TextInput, Pressable, FlatList, Alert} from 'react-native';
 import styles from './styles';
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy, sortBy} from 'lodash';
@@ -7,6 +7,8 @@ import 'localstorage-polyfill';
 import SearchResults from '../SearchResults';
 import {useQuery, gql} from '@apollo/client';
 import 'localstorage-polyfill';
+import SearchCourse from '../../components/SearchCourse';
+import {useNavigation} from '@react-navigation/native';
 
 const GET_DIVISIONS = gql`
   query Divisions {
@@ -17,29 +19,49 @@ const GET_DIVISIONS = gql`
   }
 `;
 
+const MY_COURSES_BY = gql`
+  query CoursesBy(
+    $divisionCodes: [String]
+    $courseCode: String
+    $courseTitle: String
+  ) {
+    coursesBy(
+      divisionCodes: $divisionCodes
+      courseCode: $courseCode
+      courseTitle: $courseTitle
+    ) {
+      divisionCode
+      courseCode
+      courseTitle
+      credits
+      creditTypeCode
+    }
+  }
+`;
+
 function SearchScreen() {
-  const [courseCode, setCourseCode] = useState('');
-  const [courseTitle, setCourseTitle] = useState('');
+  const navigation = useNavigation();
+
+  const [courseCodeInput, setCourseCodeInput] = useState('');
+  const [courseTitleInput, setCourseTitleInput] = useState('');
   const [selectedDivisionCodes, setSelectedDivisionCodes] = useState([]);
-  const [toggleFilter, setFilter] = useState(false);
   const [divisions, setDivisions] = useState([])
-  console.log(toggleFilter);
 
-  const {data, error, loading} = useQuery(GET_DIVISIONS)
-
-  useEffect(() => {
-    if (error) {
-      console.log(error.stack);
-      Alert.alert('Error fetching Divisions!', error.message);
-    }
-  }, [error]);
+  const {data: divdata, error: diverror, ___} = useQuery(GET_DIVISIONS)
 
   useEffect(() => {
-    console.log(data);
-    if (data) { 
-      setDivisions(data.divisions);
+    if (diverror) {
+      console.log(diverror.stack);
+      Alert.alert('Error fetching Divisions!', diverror.message);
     }
-  }, [data]);
+  }, [diverror]);
+
+  useEffect(() => {
+    console.log(divdata);
+    if (divdata) {
+      setDivisions(divdata.divisions);
+    }
+  }, [divdata]);
 
   const codes = [];
 
@@ -57,8 +79,45 @@ function SearchScreen() {
   })
 
   localStorage.setItem('division', JSON.stringify(codes));
-  localStorage.setItem('title', courseTitle);
-  localStorage.setItem('code', courseCode);
+  localStorage.setItem('title', courseTitleInput);
+  localStorage.setItem('code', courseCodeInput);
+
+  const divisionCodes = JSON.parse(localStorage.getItem('division'));
+  const courseCode = localStorage.getItem('code');
+  const courseTitle = localStorage.getItem('title');
+
+  const addCustomCourse = () => {
+    const post = {
+      courseCode: '',
+      courseTitle: '',
+      credits: '',
+    };
+    navigation.navigate('New Course', {post: post});
+  };
+
+  const [results, setResults] = useState([]);
+
+  const {data, error, courseloading} = useQuery(MY_COURSES_BY, {
+    variables: {
+      divisionCodes: divisionCodes,
+      courseCode: courseCode,
+      courseTitle: courseTitle,
+    },
+  });
+
+  useEffect(() => {
+    if (error) {
+      console.log(error.stack);
+      Alert.alert('Error fetching courses!', error.message);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    console.log(data);
+    if (data) {
+      setResults(data.coursesBy);
+    }
+  }, [data]);
 
   return (
     <View style={styles.container}>
@@ -66,18 +125,17 @@ function SearchScreen() {
         <TextInput
           autoCapitalize={'none'}
           value={courseTitle}
-          onChangeText={value => setCourseTitle(value)}
+          onChangeText={value => setCourseTitleInput(value)}
           style={styles.codeInput}
           placeholder={'Title'}
           placeholderTextColor={'grey'}
           clearButtonMode={'while-editing'}
           maxLength={25}
         />
-        <View>
           <TextInput
             autoCapitalize={'characters'}
             value={courseCode}
-            onChangeText={value => setCourseCode(value)}
+            onChangeText={value => setCourseCodeInput(value)}
             style={styles.codeInput}
             placeholder={'Code'}
             placeholderTextColor={'grey'}
@@ -100,10 +158,16 @@ function SearchScreen() {
             labelStyle={styles.labelStyle}
             containerStyle={styles.containerStyle}
           />
-        </View>
-        <View style={styles.outerSmall}>
-          <SearchResults />
-        </View>
+        <Pressable style={styles.searchButton} onPress={addCustomCourse}>
+          <Text style={styles.searchButtonText}>
+            Don't see your course, add it yourself!
+          </Text>
+        </Pressable>
+        <FlatList
+            data={results}
+            renderItem={({item, index}) => <SearchCourse course={item} />}
+            keyExtractor={(item, index) => index}
+        />
       </View>
     </View>
   );

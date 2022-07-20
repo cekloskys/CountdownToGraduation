@@ -166,9 +166,9 @@ const CourseSectionList = props => {
       <View>
         <SectionList style={styles.outer}
           sections={[
-            { title: 'Courses Complete ' + complete + ' cr.', data: completeCourses },
-            { title: 'Courses In Progress ' + inProgress + ' cr.', data: inProgressCourses },
-            { title: 'Courses Not Complete ' + notComplete + ' cr.', data: notCompleteCourses },
+            { title: 'Complete ' + complete + ' cr.', data: completeCourses },
+            { title: 'In Progress ' + inProgress + ' cr.', data: inProgressCourses },
+            { title: 'Not Complete ' + notComplete + ' cr.', data: notCompleteCourses },
           ]}
           renderItem={({ item }) => <Course post={item} />}
           renderSectionHeader={({ section }) => (
@@ -176,7 +176,7 @@ const CourseSectionList = props => {
               <View style={{flex: 1}}>
               <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{section.title}</Text>
             </View>
-              {section.title.includes('Courses Complete ') ?
+              {section.title.includes('Complete') && !section.title.includes('Not') ?
             <View style={{flex: 1}}>
               <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'right', marginRight: 10 }}>{'Gpa: '+ gpa}</Text>
               </View>

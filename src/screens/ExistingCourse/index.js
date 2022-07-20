@@ -21,9 +21,6 @@ const ExistingCourseScreen = props => {
   const post = props.route.params.post;
   console.log(post);
 
-  //const statuses = ['Complete', 'In Progress', 'Not Complete'];
-  //const designators = ['1st Major', '2nd Major', '1st Minor', '2nd Minor', 'Core', 'Elective']
-
   const credit = [{
     id: '1',
     item: '0'
@@ -196,6 +193,22 @@ const ExistingCourseScreen = props => {
   const newGradeId = gradeLetterId;
   const newGradeItem = gradeLetterItem;
 
+  let pfLetterId = '';
+  let pfLetterItem = '';
+  let m;
+
+  for (m = 0; m < passFail.length; m++){
+    if (passFail[m].item == post.grade){
+
+      pfLetterId = passFail[m].id;
+      pfLetterItem = passFail[m].item;
+    }
+  }
+  const newpfLetterId = pfLetterId;
+  const newpfLetterItem = pfLetterItem;
+
+  console.log("Grade " + newpfLetterItem);
+
   const [code, setCode] = useState(post.code);
   const [name, setName] = useState(post.name);
   const [credits, setCredits] = useState({id: newCreditId, item: newCreditItem});
@@ -204,19 +217,17 @@ const ExistingCourseScreen = props => {
   const [cnt, setCnt] = useState(post.cnt);
   const [selectedDesignators, setSelectedDesignators] = useState([{id: '1', item: '1st Major'}])
   const [relatedCode, setRelatedCode] = useState(post.relatedcode)
-  const [toggleGrade, setGrade] = useState(false);
-  const [selectedGradeLetters, setSelectedGradeLetters] = useState([]);
-  const [grades] = useState('');
-  const [selectedPassFail, setSelectedPassFail] = useState([]);
+  const [toggleGrade, setToggleGrade] = useState(false);
+  const [selectedGradeLetters, setSelectedGradeLetters] = useState({id: newGradeId, item: newGradeItem});
+  const [grade, setGrade] = useState(post.grade);
+  const [selectedPassFail, setSelectedPassFail] = useState({id: newpfLetterId, item: newpfLetterItem});
   const [creditTypeCode, setCreditTypeCode] = useState(post.creditTypeCode);
 
-
   function _toggleGrade() {
-    setGrade(!toggleGrade);
+    setToggleGrade(!toggleGrade);
   }
 
   const onCourseUpdate = () => {
-    // console.warn(designator);
     if (!code) {
       alert('Please fill in code');
       return;
@@ -242,12 +253,6 @@ const ExistingCourseScreen = props => {
       return;
     }
     const updateCourse = () => {
-      /* if (status.item === 'In Progress' || status.item === 'Not Complete'){
-        setCnt(0);
-      } else {
-        setCnt(1);
-      } */
-      // console.log('[DATA]', 'updateCourse: ' +  selectedGradeLetters.item);
       let grade = '';
       if(creditTypeCode ==="PF") {
         grade = selectedPassFail.item
@@ -381,10 +386,9 @@ const ExistingCourseScreen = props => {
 
 
   };
-  console.log(status);
-console.log(newStatusId);
-  console.log(creditTypeCode, "Hi");
+
   function Grade(){
+  console.log(selectedGradeLetters.item);
     if(status.item === "Complete") {
       if(creditTypeCode==="CR") {
         return (
@@ -419,16 +423,10 @@ console.log(newStatusId);
             />
         );
       }
-
     } else {
       return null;
     }
   }
-
-
-  // console.warn("[DBUG]", credits);
-
-  // console.log('DGUB')
 
   return (
       <View style={styles.container}>
@@ -450,7 +448,7 @@ console.log(newStatusId);
               placeholder={'Name'}
               placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
-              
+
           />
           <SelectBox
               label="Designator ..."
@@ -493,7 +491,6 @@ console.log(newStatusId);
               containerStyle={styles.containerStyle}
           />
           {Grade()}
-
         </View>
         <View style={styles.bottomContainer}>
           <Pressable style={styles.searchButtonUpdate} onPress={onCourseUpdate}>

@@ -159,14 +159,6 @@ const NewCourseScreen = props => {
       return;
     }
 
-    /* const course = {
-      code,
-      name,
-      credits,
-      semester,
-      status,
-      designator,
-    }; */
     const sortedSelectedDesignators = sortBy(selectedDesignators, 'id');
     // console.log(sortedSelectedDesignators);
     let i = 0;
@@ -190,36 +182,6 @@ const NewCourseScreen = props => {
               console.log(e);
             });
       };
-          /*
-          .addCourse(
-            code,
-            name,
-            credits,
-            semester,
-            status.item,
-            item.item,
-            code,
-            1,
-          )
-          .catch(e => {
-            console.log(e);
-          });
-      } else {
-        database
-          .addCourse(
-            code,
-            name,
-            credits,
-            semester,
-            status.item,
-            item.item,
-            code,
-            0,
-          )
-          .catch(e => {
-            console.log(e);
-          });
-      }*/
       i++;
     });
 
@@ -262,7 +224,6 @@ const NewCourseScreen = props => {
             />
         );
       }
-
     } else {
       return null;
     }
