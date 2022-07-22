@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
@@ -9,11 +9,14 @@ const NewCourseButton = props => {
 
   return (
     <TouchableOpacity
-        accessibilityHint={"Create a new course"}
+        accessibilityHint={"Search for a Course"}
         accessibilityRole={"button"}
       style={styles.button}
       onPress={() => navigation.navigate('Search')}>
-      <Ionicons name={'add'} size={30} color={'white'} />
+      {/*<Ionicons name={'add'} size={30} color={'white'} />*/}
+        <Text style={{fontWeight: 'bold', fontSize: 12, color: 'white'}}>
+            Search
+        </Text>
     </TouchableOpacity>
   );
 };

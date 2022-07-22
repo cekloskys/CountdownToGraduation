@@ -85,32 +85,14 @@ const onBoardingScreen = ({navigation}) => {
                         currentSlideIndex === slides.length -1 ? <View style={{height: 50}}>
                             <TouchableOpacity accessibilityRole={"button"} style={[styles.btn]} onPress={() => navigation.replace('Home')} >
                                 <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                                    Begin
+                                    Exit Tutorial
                                 </Text>
                             </TouchableOpacity>
-                        </View> :  <View style = {{flexDirection: 'row'}}>
-                            <TouchableOpacity
-                                accessibilityRole={"button"}
-                                accessibilityHint={"Skip Entire Tutorial"}
-                                onPress={skip}
-                                style={[styles.btn,
-                                    {
-                                        borderWidth: 1,
-                                        borderColor: COLORS.white
-                                    },
-                                ]}>
-                                <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                                    Skip
-                                </Text>
-                            </TouchableOpacity>
+                        </View> :  <View style={{height: 50}}>
                             <View style = {{width: 15}}/>
-                            <TouchableOpacity
-                                accessibilityRole={"button"}
-                                accessibilityHint={"Next Tutorial Slide"}
-                                style={[styles.btn]}
-                                onPress={goNextSlide}>
+                            <TouchableOpacity accessibilityRole={"button"} style={[styles.btn]} onPress={() => navigation.replace('Home')} >
                                 <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                                    Next
+                                    Exit Tutorial
                                 </Text>
                             </TouchableOpacity>
                         </View>
