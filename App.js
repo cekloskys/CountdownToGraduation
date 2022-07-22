@@ -52,23 +52,24 @@ const App = () => {
     }
   }, []);
   return (
-      isAppFirstLaunched != null && (
+     // isAppFirstLaunched != null && (
           <ApolloProvider client={client}>
-          <NavigationContainer>
-            <Stack.Navigator  >
-              {isAppFirstLaunched &&
-                  (<Stack.Screen options={{ headerShown: false }} name={'onBoardingScreen'} component={onBoardingScreen} />)}
-              <Stack.Screen options={{ headerShown: false }} name={'Home'} component={HomeScreen}   />
-              <Stack.Screen name={'Get started!'} component={TabNavigator} />
-              <Stack.Screen name={'New Course'} component={NewCourseScreen} />
-              <Stack.Screen name={'Core'} component={CoreScreen} />
-              <Stack.Screen name={'Existing Course'} component={ExistingCourseScreen} />
-              <Stack.Screen name={'Search Results'} component={SearchResultsScreen} />
-              <Stack.Screen name={'Search'} component={SearchScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
+          {/*<NavigationContainer>*/}
+          {/*  <Stack.Navigator  >*/}
+          {/*    {isAppFirstLaunched &&*/}
+          {/*        (<Stack.Screen options={{ headerShown: false }} name={'onBoardingScreen'} component={onBoardingScreen} />)}*/}
+          {/*    <Stack.Screen options={{ headerShown: false }} name={'Home'} component={HomeScreen}   />*/}
+          {/*    <Stack.Screen name={'Get started!'} component={TabNavigator} />*/}
+          {/*    <Stack.Screen name={'New Course'} component={NewCourseScreen} />*/}
+          {/*    <Stack.Screen name={'Core'} component={CoreScreen} />*/}
+          {/*    <Stack.Screen name={'Existing Course'} component={ExistingCourseScreen} />*/}
+          {/*    <Stack.Screen name={'Search Results'} component={SearchResultsScreen} />*/}
+          {/*    <Stack.Screen name={'Search'} component={SearchScreen} />*/}
+          {/*  </Stack.Navigator>*/}
+          {/*</NavigationContainer>*/}
+            <Router></Router>
           </ApolloProvider>
-      )
+      //)
 );
 };
 

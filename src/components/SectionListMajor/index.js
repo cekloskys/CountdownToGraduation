@@ -10,7 +10,7 @@ const tableName = 'courses';
 
 const courseDB = openDatabase({ name: 'CourseList.db' });
 
-const CourseSectionList = props => {
+const CourseSectionListMajor = props => {
   const designator = props;
   const [completeCourses, setCompleteCourses] = useState([]);
   const [inProgressCourses, setInProgressCourses] = useState([]);
@@ -161,9 +161,9 @@ const CourseSectionList = props => {
       <View>
             <SectionList style={styles.outer}
                          sections={[
-                           {title: 'Complete ' + complete + ' cr.', data: completeCourses},
-                           {title: 'In Progress ' + inProgress + ' cr.', data: inProgressCourses},
-                           {title: 'Not Complete ' + notComplete + ' cr.', data: notCompleteCourses},
+                             {title: 'Complete ' , data: completeCourses},
+                           {title: 'In Progress ' , data: inProgressCourses},
+                           {title: 'Not Complete ' , data: notCompleteCourses},
                          ]}
                          renderItem={({item}) => <Course post={item}/>}
                          renderSectionHeader={({section}) => (
@@ -171,18 +171,6 @@ const CourseSectionList = props => {
                                <View style={{flex: 1}}>
                                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>{section.title}</Text>
                                </View>
-                               {section.title.includes('Complete') && !section.title.includes('Not') ?
-                                   <View style={{flex: 1}}>
-                                     <Text style={{
-                                       fontSize: 18,
-                                       fontWeight: 'bold',
-                                       textAlign: 'right',
-                                       marginRight: 10
-                                     }}>{'Gpa: ' + gpa}</Text>
-                                   </View>
-                                   :
-                                   <Text></Text>
-                               }
                              </View>
                          )}
                          keyExtractor={(item, index) => index}
@@ -191,4 +179,4 @@ const CourseSectionList = props => {
   );
 };
 
-export default CourseSectionList;
+export default CourseSectionListMajor;

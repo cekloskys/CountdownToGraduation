@@ -73,7 +73,7 @@ const onBoardingScreen = ({navigation}) => {
                     }}>
                     {slides.map((_,index) => (
                         <View key={index} style={[styles.indicator,
-                            currentSlideIndex == index && {
+                            currentSlideIndex === index && {
                                 backgroundColor: COLORS.white,
                                 width: 25,
                             },
@@ -82,7 +82,7 @@ const onBoardingScreen = ({navigation}) => {
                 </View>
                 <View accessibilityRole={"adjustable"} style={{marginBottom: 20}}>
                     {
-                        currentSlideIndex == slides.length -1 ? <View style={{height: 50}}>
+                        currentSlideIndex === slides.length -1 ? <View style={{height: 50}}>
                             <TouchableOpacity accessibilityRole={"button"} style={[styles.btn]} onPress={() => navigation.replace('Home')} >
                                 <Text style={{fontWeight: 'bold', fontSize: 15}}>
                                     Begin
