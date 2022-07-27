@@ -490,10 +490,10 @@ const ExistingCourseScreen = props => {
           {Grade()}
         </View>
         <View style={styles.bottomContainer}>
-          <Pressable style={styles.searchButtonUpdate} onPress={onCourseUpdate}>
-            <Text style={styles.searchButtonText}>Update</Text>
+          <Pressable accessibilityRole={'button'} style={styles.searchButtonUpdate} onPress={onCourseUpdate}>
+            <Text style={styles.searchButtonText} >Update</Text>
           </Pressable>
-          <Pressable style={styles.searchButton} onPress={showConfirmDialog}>
+          <Pressable accessibilityRole={'button'} style={styles.searchButton} onPress={showConfirmDialog}>
             <Text style={styles.searchButtonText}>Delete</Text>
           </Pressable>
         </View>

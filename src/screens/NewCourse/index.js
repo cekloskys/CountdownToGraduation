@@ -244,6 +244,7 @@ const NewCourseScreen = props => {
           placeholder={'Enter Course Title'}
         />
         <TextInput
+            accessibilityHint={"Credits"}
           value={credits.toString()}
           onChangeText={value => setCredits(value)}
           style={styles.semesterInput}

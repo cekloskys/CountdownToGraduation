@@ -23,7 +23,7 @@ const Course = props => {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.semester}>{post.grade}</Text>
-          <Text style={styles.credits}>{post.credits} cr.</Text>
+          <Text  style={styles.credits}>{post.credits} cr.</Text>
         </View>
       </TouchableOpacity>
     </View>

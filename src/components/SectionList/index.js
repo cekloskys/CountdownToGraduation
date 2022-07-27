@@ -5,6 +5,7 @@ import Course from '../../components/Course';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
+import {accessibilityRole} from "react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes";
 
 const tableName = 'courses';
 
@@ -159,9 +160,11 @@ const CourseSectionList = props => {
   return (
 
       <View>
-            <SectionList style={styles.outer}
+            <SectionList
+                         
+                         style={styles.outer}
                          sections={[
-                           {title: 'Complete ' + complete + ' cr.', data: completeCourses},
+                           {title: 'Complete ' +  complete + ' cr.', data: completeCourses},
                            {title: 'In Progress ' + inProgress + ' cr.', data: inProgressCourses},
                            {title: 'Not Complete ' + notComplete + ' cr.', data: notCompleteCourses},
                          ]}
