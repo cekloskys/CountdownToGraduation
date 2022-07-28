@@ -5,8 +5,9 @@ import MajorScreen from '../screens/Major';
 import CoreScreen from '../screens/Core';
 import ElectiveScreen from '../screens/Elective'
 import MinorScreen from '../screens/Minor'
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const TabNavigator = props => {
   return (
@@ -16,6 +17,13 @@ const TabNavigator = props => {
         indicatorStyle: {
           backgroundColor: '#f15454',
         },
+          labelStyle: {
+              flex: 1,
+              fontSize: 15,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 12,
+          },
       }}>
       <Tab.Screen name={'All'} component={AllScreen} />
       <Tab.Screen name={'Major'} component={MajorScreen} />

@@ -96,7 +96,7 @@ const HomeScreen = props => {
 
   let credits = 0;
   for (let i = 0; i < allCourses.length; i++) {
-    if (allCourses[i].cnt === 1) {
+    if (allCourses[i].cnt === 1 && allCourses[i].grade !=='F') {
       credits += allCourses[i].credits;
     }
   }

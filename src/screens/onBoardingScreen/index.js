@@ -47,7 +47,7 @@ const slides = [
 const Slide = ({item}) => {
     return  (
         <View style={{alignItems: 'center'}}>
-            <Image source={item.image} style={{height: '65%', width, resizeMode: 'contain'}}/>
+            <Image source={item.image} style={{height: '55%', width, resizeMode: 'contain'}}/>
             <View>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>{item.subtitle}</Text>
@@ -73,7 +73,7 @@ const onBoardingScreen = ({navigation}) => {
                     }}>
                     {slides.map((_,index) => (
                         <View key={index} style={[styles.indicator,
-                            currentSlideIndex == index && {
+                            currentSlideIndex === index && {
                                 backgroundColor: COLORS.white,
                                 width: 25,
                             },
@@ -82,35 +82,17 @@ const onBoardingScreen = ({navigation}) => {
                 </View>
                 <View accessibilityRole={"adjustable"} style={{marginBottom: 20}}>
                     {
-                        currentSlideIndex == slides.length -1 ? <View style={{height: 50}}>
+                        currentSlideIndex === slides.length -1 ? <View style={{height: 50}}>
                             <TouchableOpacity accessibilityRole={"button"} style={[styles.btn]} onPress={() => navigation.replace('Home')} >
                                 <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                                    Begin
+                                    Exit Tutorial
                                 </Text>
                             </TouchableOpacity>
-                        </View> :  <View style = {{flexDirection: 'row'}}>
-                            <TouchableOpacity
-                                accessibilityRole={"button"}
-                                accessibilityHint={"Skip Entire Tutorial"}
-                                onPress={skip}
-                                style={[styles.btn,
-                                    {
-                                        borderWidth: 1,
-                                        borderColor: COLORS.white
-                                    },
-                                ]}>
-                                <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                                    Skip
-                                </Text>
-                            </TouchableOpacity>
+                        </View> :  <View style={{height: 50}}>
                             <View style = {{width: 15}}/>
-                            <TouchableOpacity
-                                accessibilityRole={"button"}
-                                accessibilityHint={"Next Tutorial Slide"}
-                                style={[styles.btn]}
-                                onPress={goNextSlide}>
+                            <TouchableOpacity accessibilityRole={"button"} style={[styles.btn]} onPress={() => navigation.replace('Home')} >
                                 <Text style={{fontWeight: 'bold', fontSize: 15}}>
-                                    Next
+                                    Exit Tutorial
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -170,7 +152,7 @@ const styles = StyleSheet.create({
     },
     subtitle:{
         color: COLORS.white,
-        fontSize: 13,
+        fontSize: 15.6,
         maxWidth: '70%',
         marginTop: 10,
         textAlign: 'center',

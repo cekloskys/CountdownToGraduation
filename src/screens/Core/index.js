@@ -5,7 +5,7 @@ import Course from '../../components/Course';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import CourseSectionList from "../../components/SectionList";
+import CourseSectionListMajor from "../../components/SectionListMajor";
 
 
 const database = require('../../components/Handlers/database.js');
@@ -17,7 +17,7 @@ const courseDB = openDatabase({ name: 'CourseList.db' });
 const CoreScreen = props => {
   return (
     <View>
-      <CourseSectionList designator={["Core"]}/>
+      <CourseSectionListMajor designator={["Core"]}/>
       <NewCourseButton />
     </View>
   );

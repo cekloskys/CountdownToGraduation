@@ -5,7 +5,7 @@ import Course from '../../components/Course';
 import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import CourseSectionList from "../../components/SectionList";
+import CourseSectionListMajor from "../../components/SectionListMajor";
 
 const tableName = 'courses';
 
@@ -15,7 +15,7 @@ const ElectiveScreen = props => {
 
   return (
     <View>
-      <CourseSectionList designator={["Elective"]}/>
+      <CourseSectionListMajor designator={["Elective"]}/>
       <NewCourseButton />
     </View>
   );

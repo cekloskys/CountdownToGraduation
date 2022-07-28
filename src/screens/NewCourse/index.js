@@ -74,50 +74,46 @@ const NewCourseScreen = props => {
   const gradeLetters = [
     {
       id: '1',
-      item: 'A+',
-    },
-    {
-      id: '2',
       item: 'A',
     },
     {
-      id: '3',
+      id: '2',
       item: 'A-',
     },
     {
-      id: '4',
+      id: '3',
       item: 'B+',
     },
     {
-      id: '5',
+      id: '4',
       item: 'B',
     },
     {
-      id: '6',
+      id: '5',
       item: 'B-',
     },
     {
-      id: '7',
+      id: '6',
       item: 'C+',
     },
     {
-      id: '8',
+      id: '7',
       item: 'C',
     },
     {
-      id: '9',
+      id: '8',
       item: 'C-',
     },
     {
-      id: '10',
+      id: '9',
       item: 'D+',
     },
     {
-      id: '11',
+      id: '10',
       item: 'D',
     },
     {
-      id: '12',
+      id: '11',
       item: 'F',
     },
   ];
@@ -248,6 +244,7 @@ const NewCourseScreen = props => {
           placeholder={'Enter Course Title'}
         />
         <TextInput
+            accessibilityHint={"Credits"}
           value={credits.toString()}
           onChangeText={value => setCredits(value)}
           style={styles.semesterInput}
