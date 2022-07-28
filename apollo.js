@@ -9,7 +9,7 @@ import { setContext } from '@apollo/client/link/context';
 import 'localstorage-polyfill';
 
 const URI = 'http://localhost:4000/';
-// const androidURI = 'https://chestnut-hill-college-2.herokuapp.com/';
+//const androidURI = 'https://chestnut-hill-college-2.herokuapp.com/';
 const androidURI = 'https://chcmobileapps.ddns.net';
 
 const httpLink = createHttpLink({
