@@ -141,6 +141,56 @@ const ExistingCourseScreen = props => {
       item: 'F',
     },
   ];
+  const gradeAndPassFail = [
+    {
+      id: '1',
+      item: 'P',
+    },
+    {
+      id: '2',
+      item: 'A',
+    },
+    {
+      id: '3',
+      item: 'A-',
+    },
+    {
+      id: '4',
+      item: 'B+',
+    },
+    {
+      id: '5',
+      item: 'B',
+    },
+    {
+      id: '6',
+      item: 'B-',
+    },
+    {
+      id: '7',
+      item: 'C+',
+    },
+    {
+      id: '8',
+      item: 'C',
+    },
+    {
+      id: '9',
+      item: 'C-',
+    },
+    {
+      id: '10',
+      item: 'D+',
+    },
+    {
+      id: '11',
+      item: 'D',
+    },
+    {
+      id: '12',
+      item: 'F',
+    },
+  ];
 
   let creditId = '';
   let creditItem = '';
@@ -204,11 +254,26 @@ const ExistingCourseScreen = props => {
   const newpfLetterId = pfLetterId;
   const newpfLetterItem = pfLetterItem;
 
+  let pfAndGLetterId = '';
+  let pfAndGLetterItem = '';
+  let n;
+
+  for (n = 0; n < gradeAndPassFail.length; n++){
+    if (gradeAndPassFail[n].item === post.grade){
+
+      pfAndGLetterId = gradeAndPassFail[n].id;
+      pfAndGLetterItem = gradeAndPassFail[n].item;
+    }
+  }
+  const newpfAndGLetterId = pfAndGLetterId;
+  const newpfAndGLetterItem = pfAndGLetterItem;
+
   console.log("Grade " + newpfLetterItem);
 
   const [code, setCode] = useState(post.code);
   const [name, setName] = useState(post.name);
-  const [credits, setCredits] = useState({id: newCreditId, item: newCreditItem});
+  //const [credits, setCredits] = useState({id: newCreditId, item: newCreditItem});
+  const [credits, setCredits] = useState(post.credits);
   const [status, setStatus] = useState({id: newStatusId, item: newStatusItem});
   const [designator, setDesignator] = useState({id: newDesignatorId, item: newDesignatorItem});
   const [cnt, setCnt] = useState(post.cnt);
@@ -216,8 +281,8 @@ const ExistingCourseScreen = props => {
   const [relatedCode, setRelatedCode] = useState(post.relatedcode)
   const [toggleGrade, setToggleGrade] = useState(false);
   const [selectedGradeLetters, setSelectedGradeLetters] = useState({id: newGradeId, item: newGradeItem});
-  const [grade, setGrade] = useState(post.grade);
   const [selectedPassFail, setSelectedPassFail] = useState({id: newpfLetterId, item: newpfLetterItem});
+  const [selectedGradeAndPassFail, setSelectedGradeAndPassFail] = useState({id: newpfAndGLetterId, item: newpfAndGLetterItem});
   const [creditTypeCode, setCreditTypeCode] = useState(post.creditTypeCode);
 
   function _toggleGrade() {
@@ -245,20 +310,32 @@ const ExistingCourseScreen = props => {
       alert('Please select a Status');
       return;
     }
-    if (status.item==="Complete" && creditTypeCode ==="CR" && (!selectedGradeLetters || selectedGradeLetters.length ===0)) {
-      alert('Please select a Grade');
-      return;
+    if (status.item==="Complete") {
+      if (creditTypeCode === "CR" &&
+          (!selectedGradeLetters.item || selectedGradeLetters.length === 0)) {
+        alert('Please select a Grade');
+        return;
+      } else if (creditTypeCode === "PF" && (!selectedPassFail.item || selectedPassFail.length === 0)) {
+        alert('Please select a Grade');
+        return;
+      } else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"
+          && (!selectedGradeAndPassFail.item || selectedGradeAndPassFail.length === 0)) {
+        alert('Please select a Grade');
+        return;
+      }
     }
     const updateCourse = () => {
       let grade = '';
       if(creditTypeCode ==="PF") {
         grade = selectedPassFail.item
-      }else{
+      }else if(creditTypeCode ==="CR"){
         grade = selectedGradeLetters.item
+      }else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"){
+        grade = selectedGradeAndPassFail.item
       }
       courseDB.transaction(txn => {
         txn.executeSql(
-            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', status = '${status.item}', designator = '${designator.item}', grade = '${grade}', creditTypeCode ='${creditTypeCode}' WHERE id = ${post.id}`, [],
+            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits}', status = '${status.item}', designator = '${designator.item}', grade = '${grade}', creditTypeCode ='${creditTypeCode}' WHERE id = ${post.id}`, [],
             (sqlTxn, res) => {
               console.log(`${code} updated successfully`);
             },
@@ -276,13 +353,15 @@ const ExistingCourseScreen = props => {
       let grade = '';
       if(creditTypeCode ==="PF") {
         grade = selectedPassFail.item
-      }else{
+      }else if(creditTypeCode ==="CR"){
         grade = selectedGradeLetters.item
+      }else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"){
+        grade = selectedGradeAndPassFail.item
       }
       // console.log('[DATA]', 'updateCourse: ' + code + name);
       courseDB.transaction(txn => {
         txn.executeSql(
-            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits.item}', status = '${status.item}',  grade = '${grade}', creditTypeCode = '${creditTypeCode}' WHERE relatedcode = '${post.code}'`, [],
+            `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits}', status = '${status.item}',  grade = '${grade}', creditTypeCode = '${creditTypeCode}' WHERE relatedcode = '${post.code}'`, [],
             (sqlTxn, res) => {
               console.log(`${code} updated successfully`);
             },
@@ -384,13 +463,13 @@ const ExistingCourseScreen = props => {
 
   };
 
-  function Grade(){
-  console.log(selectedGradeLetters.item);
-    if(status.item === "Complete") {
-      if(creditTypeCode==="CR") {
+  function Grade() {
+    console.log(selectedGradeLetters.item);
+    if (status.item === "Complete") {
+      if (creditTypeCode === "CR") {
         return (
             <SelectBox
-                label="Grade ..."
+                label="Select Grade"
                 options={gradeLetters}
                 value={selectedGradeLetters}
                 onChange={onChangeGrades()}
@@ -403,10 +482,10 @@ const ExistingCourseScreen = props => {
                 containerStyle={styles.containerStyle}
             />
         );
-      }else if(creditTypeCode ==="PF"){
+      } else if (creditTypeCode === "PF") {
         return (
             <SelectBox
-                label="Grade ..."
+                label="Select Grade"
                 options={passFail}
                 value={selectedPassFail}
                 onChange={onChangePassFail()}
@@ -419,9 +498,26 @@ const ExistingCourseScreen = props => {
                 containerStyle={styles.containerStyle}
             />
         );
+      } else if (creditTypeCode !== "PF" && creditTypeCode !== "CR") {
+        return (
+            <SelectBox
+                label="Select Grade"
+                options={gradeAndPassFail}
+                value={selectedGradeAndPassFail}
+                onChange={onChangeGradeAndPassFail()}
+                hideInputFilter={true}
+                arrowIconColor={'grey'}
+                searchIconColor={'grey'}
+                toggleIconColor={'grey'}
+                optionsLabelStyle={styles.multiOptionsLabelStyle}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerStyle}
+            />
+        );
+
+      } else {
+        return null;
       }
-    } else {
-      return null;
     }
   }
 
@@ -433,7 +529,7 @@ const ExistingCourseScreen = props => {
               value={code}
               onChangeText={value => setCode(value)}
               style={styles.codeInput}
-              placeholder={'Code'}
+              placeholder={'Enter Course Code'}
               placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
               maxLength={10}
@@ -442,13 +538,21 @@ const ExistingCourseScreen = props => {
               value={name}
               onChangeText={value => setName(value)}
               style={styles.nameInput}
-              placeholder={'Name'}
+              placeholder={'Enter Course Name'}
               placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
 
           />
+          <TextInput
+              value={credits.toString()}
+              onChangeText={value => setCredits(value)}
+              style={styles.semesterInput}
+              clearButtonMode={'while-editing'}
+              maxLength={11}
+              placeholder={'Enter Number of Credits'}
+          />
           <SelectBox
-              label="Designator ..."
+              label="Select Course Designators"
               options={designators}
               value={designator}
               hideInputFilter={true}
@@ -462,20 +566,7 @@ const ExistingCourseScreen = props => {
               containerStyle={styles.containerStyle}
           />
           <SelectBox
-              label="Credits ..."
-              options={credit}
-              value={credits}
-              onChange={onChangeCredits()}
-              hideInputFilter={true}
-              arrowIconColor={'grey'}
-              searchIconColor={'grey'}
-              toggleIconColor={'grey'}
-              optionsLabelStyle={styles.multiOptionsLabelStyle}
-              labelStyle={styles.labelStyle}
-              containerStyle={styles.containerStyle}
-          />
-          <SelectBox
-              label="Status ..."
+              label="Select Course Status"
               options={statuses}
               value={status}
               onChange={onChange()}
@@ -510,10 +601,6 @@ const ExistingCourseScreen = props => {
      return (val) => setSelectedGradeLetters(val)
   }
 
-  function onChangeCredits() {
-    return (val) => setCredits(val)
-  }
-
   function onChangeDesignator() {
     return (val) => setDesignator(val)
   }
@@ -523,6 +610,9 @@ const ExistingCourseScreen = props => {
   }
   function onChangePassFail(){
     return (val) => setSelectedPassFail(val);
+  }
+  function onChangeGradeAndPassFail(){
+    return (val) => setSelectedGradeAndPassFail(val);
   }
 };
 

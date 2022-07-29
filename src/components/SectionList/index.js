@@ -161,12 +161,12 @@ const CourseSectionList = props => {
 
       <View>
             <SectionList
-                         
+                accessibilityHint={'Credits'}
                          style={styles.outer}
                          sections={[
-                           {title: 'Complete ' +  complete + ' cr.', data: completeCourses},
-                           {title: 'In Progress ' + inProgress + ' cr.', data: inProgressCourses},
-                           {title: 'Not Complete ' + notComplete + ' cr.', data: notCompleteCourses},
+                           {title: 'Complete ' +  complete + ' credits', data: completeCourses},
+                           {title: 'In Progress ' + inProgress + ' credits', data: inProgressCourses},
+                           {title: 'Not Complete ' + notComplete + ' credits', data: notCompleteCourses},
                          ]}
                          renderItem={({item}) => <Course post={item}/>}
                          renderSectionHeader={({section}) => (
