@@ -19,7 +19,6 @@ const ExistingCourseScreen = props => {
   const navigation = useNavigation();
 
   const post = props.route.params.post;
-  console.log(post);
 
   const credit = [{
     id: '1',
