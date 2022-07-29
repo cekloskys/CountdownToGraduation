@@ -19,8 +19,6 @@ const CourseSectionList = props => {
 
 
   const navigation = useNavigation();
-  console.log(designator.designator);
-  console.log(designator.designator === "All");
   const getStatusCourses = (status) => {
      let query = '';
      if (designator.designator[0] === "All"){
@@ -30,14 +28,12 @@ const CourseSectionList = props => {
      }else{
        query = `SELECT * FROM ${tableName} WHERE status IN ('${status}') AND designator IN ('${designator.designator[0]}','${designator.designator[1]}')`;
      }
-    console.log(query);
+
     courseDB.transaction(txn => {
       txn.executeSql(
-        //`SELECT * FROM ${tableName} WHERE status IN ('${status}')`,
           query,
         [],
         (sqlTxn, res) => {
-          console.log("Courses retrieved successfully");
           let len = res.rows.length;
           // console.warn(len)
           if (len >= 0) {
@@ -45,7 +41,6 @@ const CourseSectionList = props => {
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
               results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, semester: item.semester, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, creditTypeCode: item.creditTypeCode, cnt: item.cnt });
-               console.log(results[i])
             }
             if (status == "Complete") {
               setCompleteCourses(results);
@@ -161,7 +156,7 @@ const CourseSectionList = props => {
 
       <View>
             <SectionList
-                         
+
                          style={styles.outer}
                          sections={[
                            {title: 'Complete ' +  complete + ' cr.', data: completeCourses},

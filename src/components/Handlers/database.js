@@ -1,4 +1,5 @@
 import { openDatabase } from 'react-native-sqlite-storage';
+import courses from "../../../assets/data/courses";
 
 const tableName = 'courses';
 
@@ -51,9 +52,7 @@ module.exports = {
                         for (let i = 0; i < len; i++) {
                             let item = res.rows.item(i);
                             results.push({ id: item.id, code: item.code, name: item.name, credits: item.credits, status: item.status, designator: item.designator, relatedcode: item.relatedcode, grade: item.grade, creditTypeCode: item.creditTypeCode, cnt: item.cnt });
-                            console.log(results[i])
                         }
-                        // console.warn('[DATA]', results[0])
                         let list = results;
                     }
                 },
@@ -74,11 +73,6 @@ module.exports = {
                     courses.push(result.rows.item(index))
                 }
             });
-
-            /* for (let i = 0; i < courses.rows.length; index++) {
-                console.log('[DBUG]', courses[i])
-            } */
-
             return courses;
         } catch (error) {
             console.error(error);
@@ -87,7 +81,6 @@ module.exports = {
     },
 
     addCourse: async function (code, name, credits, status, designator, relatedcode, grade, creditTypeCode, cnt) {
-        // console.log('[DATA]', 'addCourse: ' + code + name);
         courseDB.transaction(txn => {
             txn.executeSql(
                 `INSERT INTO ${tableName} (code, name, credits, status, designator, relatedcode, grade, creditTypeCode, cnt) VALUES ("${code}", "${name}", ${credits}, "${status}", "${designator}", "${relatedcode}","${grade}","${creditTypeCode}", "${cnt}")`, [],

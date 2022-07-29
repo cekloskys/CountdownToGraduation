@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -15,11 +15,13 @@ import SelectBox from 'react-native-multi-selectbox';
 import {xorBy, sortBy} from 'lodash';
 import styles from '../NewCourse/styles';
 import {useNavigation} from '@react-navigation/native';
+import {openDatabase} from "react-native-sqlite-storage";
 const database = require('../../components/Handlers/database.js');
+const courseDB = openDatabase({ name: 'CourseList.db' });
+const tableName = 'courses';
 
 const NewCourseScreen = props => {
   const post = props.route.params.post;
-  console.log(post);
 
   const [code, setCode] = useState(post.courseCode);
   const [name, setName] = useState(post.courseTitle);
@@ -129,6 +131,33 @@ const NewCourseScreen = props => {
   ];
   const navigation = useNavigation();
 
+  const [len, setLen] = useState(0);
+  const getCourses = (code) => {
+    const query = `SELECT * FROM ${tableName} WHERE code IN ('${code}')`;
+    courseDB.transaction(txn => {
+      txn.executeSql(
+          query,
+          [],
+          (sqlTxn, res) => {
+            setLen(res.rows.length);
+          },
+          error => {
+          },
+      );
+    });
+  }
+
+  React.useEffect(async () => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getCourses(code);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(async () => {
+    await getCourses(code);
+  }, []);
+
   const onCourseAdd = () => {
     if (!code) {
       alert('Please fill in code');
@@ -156,35 +185,53 @@ const NewCourseScreen = props => {
     }
 
     const sortedSelectedDesignators = sortBy(selectedDesignators, 'id');
-    // console.log(sortedSelectedDesignators);
-    let i = 0;
-    let grade = '';
-    sortedSelectedDesignators.forEach(item => {
-      if(creditTypeCode ==="PF") {
-        grade = selectedPassFail.item
-      }else{
-        grade = selectedGradeLetters.item
-      }
-      if (i === 0) {
-        database
-            .addCourse(code, name, credits, status.item, item.item, code, grade, creditTypeCode,1)
-            .catch(e => {
-              console.log(e);
-            });
-      } else {
-        database
-            .addCourse(code, name, credits, status.item, item.item, code, grade, creditTypeCode, 0)
-            .catch(e => {
-              console.log(e);
-            });
-      };
-      i++;
-    });
+
+            if (len === 0) {
+              let i = 0;
+              let grade = '';
+              sortedSelectedDesignators.forEach(item => {
+                if(creditTypeCode ==="PF") {
+                  grade = selectedPassFail.item
+                }else{
+                  grade = selectedGradeLetters.item
+                }
+                if (i === 0) {
+                  database
+                      .addCourse(code, name, credits, status.item, item.item, code, grade, creditTypeCode,1)
+                      .catch(e => {
+                        console.log(e);
+                      });
+                } else {
+                  database
+                      .addCourse(code, name, credits, status.item, item.item, code, grade, creditTypeCode, 0)
+                      .catch(e => {
+                        console.log(e);
+                      });
+                };
+                i++;
+              });
+            } else {
+              let grade = '';
+              const cnt = 0;
+              sortedSelectedDesignators.forEach(item => {
+                if(creditTypeCode ==="PF") {
+                  grade = selectedPassFail.item
+                }else{
+                  grade = selectedGradeLetters.item
+                }
+
+                database
+                    .addCourse(code, name, credits, status.item, item.item, code, grade, creditTypeCode, cnt)
+                    .catch(e => {
+                      console.log(e);
+                    });
+              });
+            }
 
     alert('Course Created!');
     navigation.navigate('Get started!');
   };
-  console.log(creditTypeCode, "Hello")
+
   function Grade(){
     if(status.item === "Complete") {
       if(creditTypeCode ==="CR") {
