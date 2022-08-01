@@ -31,6 +31,7 @@ const NewCourseScreen = props => {
   const [selectedDesignators, setSelectedDesignators] = useState([]);
   const [selectedGradeLetters, setSelectedGradeLetters] = useState([]);
   const [selectedPassFail, setSelectedPassFail] = useState([]);
+  const [selectedGradeAndPassFail, setSelectedGradeAndPassFail] = useState([]);
   const [creditTypeCode, setCreditTypeCode] = useState(post.creditTypeCode);
 
   const statuses = [
@@ -129,6 +130,56 @@ const NewCourseScreen = props => {
       item: 'F',
     },
   ];
+  const gradeAndPassFail = [
+    {
+      id: '1',
+      item: 'P',
+    },
+    {
+      id: '2',
+      item: 'A',
+    },
+    {
+      id: '3',
+      item: 'A-',
+    },
+    {
+      id: '4',
+      item: 'B+',
+    },
+    {
+      id: '5',
+      item: 'B',
+    },
+    {
+      id: '6',
+      item: 'B-',
+    },
+    {
+      id: '7',
+      item: 'C+',
+    },
+    {
+      id: '8',
+      item: 'C',
+    },
+    {
+      id: '9',
+      item: 'C-',
+    },
+    {
+      id: '10',
+      item: 'D+',
+    },
+    {
+      id: '11',
+      item: 'D',
+    },
+    {
+      id: '12',
+      item: 'F',
+    },
+  ];
   const navigation = useNavigation();
 
   const [len, setLen] = useState(0);
@@ -160,28 +211,38 @@ const NewCourseScreen = props => {
 
   const onCourseAdd = () => {
     if (!code) {
-      alert('Please fill in code');
+      alert('Please enter a course code.');
       return;
     }
     if (!name) {
-      alert('Please fill in Course Name');
+      alert('Please enter a course title.');
+      return;
+    }
+    if (!credits) {
+      alert('Please enter number of credits.');
       return;
     }
     if (!selectedDesignators || selectedDesignators.length === 0) {
-      alert('Please select Designators');
-      return;
-    }
-    if (!credits < 0) {
-      alert('Please select the Credits');
+      alert('Please select course designators.');
       return;
     }
     if (!status) {
-      alert('Please select a Status');
+      alert('Please select course status.');
       return;
     }
-    if (status.item==="Complete" && creditTypeCode ==="CR" &&(!selectedGradeLetters || selectedGradeLetters.length ===0)) {
-      alert('Please select a Grade');
-      return;
+    if (status.item==="Complete") {
+      if (creditTypeCode === "CR" &&
+          (!selectedGradeLetters || selectedGradeLetters.length === 0)) {
+        alert('Please select a grade.');
+        return;
+      } else if (creditTypeCode === "PF" && (!selectedPassFail || selectedPassFail.length === 0)) {
+        alert('Please select a grade.');
+        return;
+      } else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"
+      && (!selectedGradeAndPassFail || selectedGradeAndPassFail.length === 0)) {
+        alert('Please select a grade.');
+        return;
+      }
     }
 
     const sortedSelectedDesignators = sortBy(selectedDesignators, 'id');
@@ -192,8 +253,10 @@ const NewCourseScreen = props => {
               sortedSelectedDesignators.forEach(item => {
                 if(creditTypeCode ==="PF") {
                   grade = selectedPassFail.item
-                }else{
+                }else if(creditTypeCode ==="CR"){
                   grade = selectedGradeLetters.item
+                }else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"){
+                  grade = selectedGradeAndPassFail.item
                 }
                 if (i === 0) {
                   database
@@ -216,10 +279,11 @@ const NewCourseScreen = props => {
               sortedSelectedDesignators.forEach(item => {
                 if(creditTypeCode ==="PF") {
                   grade = selectedPassFail.item
-                }else{
+                }else if(creditTypeCode ==="CR"){
                   grade = selectedGradeLetters.item
+                }else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"){
+                  grade = selectedGradeAndPassFail.item
                 }
-
                 database
                     .addCourse(code, name, credits, status.item, item.item, code, grade, creditTypeCode, cnt)
                     .catch(e => {
@@ -232,12 +296,12 @@ const NewCourseScreen = props => {
     navigation.navigate('Get started!');
   };
 
-  function Grade(){
-    if(status.item === "Complete") {
-      if(creditTypeCode ==="CR") {
+  function Grade() {
+    if (status.item === "Complete") {
+      if (creditTypeCode === "CR") {
         return (
             <SelectBox
-                label="Grade ..."
+                label="Select Grade"
                 options={gradeLetters}
                 value={selectedGradeLetters}
                 onChange={onChangeGrades()}
@@ -250,10 +314,10 @@ const NewCourseScreen = props => {
                 containerStyle={styles.containerStyle}
             />
         );
-      }else if(creditTypeCode ==="PF"){
+      } else if (creditTypeCode === "PF") {
         return (
             <SelectBox
-                label="Grade ..."
+                label="Select Grade"
                 options={passFail}
                 value={selectedPassFail}
                 onChange={onChangePassFail()}
@@ -266,9 +330,26 @@ const NewCourseScreen = props => {
                 containerStyle={styles.containerStyle}
             />
         );
+      } else if (creditTypeCode !== "PF" && creditTypeCode !== "CR") {
+        return (
+            <SelectBox
+                label="Select Grade"
+                options={gradeAndPassFail}
+                value={selectedGradeAndPassFail}
+                onChange={onChangeGradeAndPassFail()}
+                hideInputFilter={true}
+                arrowIconColor={'grey'}
+                searchIconColor={'grey'}
+                toggleIconColor={'grey'}
+                optionsLabelStyle={styles.multiOptionsLabelStyle}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerStyle}
+            />
+        );
+
+      } else {
+        return null;
       }
-    } else {
-      return null;
     }
   }
   return (
@@ -291,7 +372,6 @@ const NewCourseScreen = props => {
           placeholder={'Enter Course Title'}
         />
         <TextInput
-            accessibilityHint={"Credits"}
           value={credits.toString()}
           onChangeText={value => setCredits(value)}
           style={styles.semesterInput}
@@ -300,7 +380,7 @@ const NewCourseScreen = props => {
           placeholder={'Enter Number of Credits'}
         />
         <SelectBox
-          label="Designators ..."
+          label="Select Course Designators"
           options={designators}
           selectedValues={selectedDesignators}
           onMultiSelect={onMultiChange()}
@@ -316,7 +396,7 @@ const NewCourseScreen = props => {
           containerStyle={styles.containerStyle}
         />
         <SelectBox
-          label="Status ..."
+          label="Select Course Status"
           options={statuses}
           value={status}
           onChange={onChange()}
@@ -346,12 +426,14 @@ const NewCourseScreen = props => {
   function onChange() {
     return val => setStatus(val);
   }
-
   function onChangeGrades(){
     return (val) => setSelectedGradeLetters(val);
   }
   function onChangePassFail(){
     return (val) => setSelectedPassFail(val);
+  }
+  function onChangeGradeAndPassFail(){
+    return (val) => setSelectedGradeAndPassFail(val);
   }
 
 };

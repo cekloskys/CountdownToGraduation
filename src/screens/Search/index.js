@@ -127,7 +127,7 @@ function SearchScreen() {
           value={courseTitle}
           onChangeText={value => setCourseTitleInput(value)}
           style={styles.codeInput}
-          placeholder={'Title'}
+          placeholder={'Enter Course Title'}
           placeholderTextColor={'grey'}
           clearButtonMode={'while-editing'}
           maxLength={25}
@@ -137,13 +137,13 @@ function SearchScreen() {
             value={courseCode}
             onChangeText={value => setCourseCodeInput(value)}
             style={styles.codeInput}
-            placeholder={'Code'}
+            placeholder={'Enter Course Code'}
             placeholderTextColor={'grey'}
             clearButtonMode={'while-editing'}
             maxLength={10}
           />
           <SelectBox
-            label="Division Codes ..."
+            label="Select Division Codes"
             options={mappedDivisions}
             selectedValues={selectedDivisionCodes}
             onMultiSelect={onMultiChange()}
@@ -158,7 +158,8 @@ function SearchScreen() {
             labelStyle={styles.labelStyle}
             containerStyle={styles.containerStyle}
           />
-        <Pressable style={styles.searchButton} onPress={addCustomCourse}>
+        <Pressable style={styles.searchButton} onPress={addCustomCourse} accessible={true}
+                   accessibilityRole={"button"}>
           <Text style={styles.searchButtonText}>
             Don't see your course, add it yourself!
           </Text>

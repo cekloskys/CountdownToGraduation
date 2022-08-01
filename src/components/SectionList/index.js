@@ -156,21 +156,20 @@ const CourseSectionList = props => {
 
       <View>
             <SectionList
-
                          style={styles.outer}
                          sections={[
-                           {title: 'Complete ' +  complete + ' cr.', data: completeCourses},
-                           {title: 'In Progress ' + inProgress + ' cr.', data: inProgressCourses},
-                           {title: 'Not Complete ' + notComplete + ' cr.', data: notCompleteCourses},
+                           {title: 'Complete ' +  complete + ' credits', data: completeCourses},
+                           {title: 'In Progress ' + inProgress + ' credits', data: inProgressCourses},
+                           {title: 'Not Complete ' + notComplete + ' credits', data: notCompleteCourses},
                          ]}
                          renderItem={({item}) => <Course post={item}/>}
                          renderSectionHeader={({section}) => (
                              <View style={styles.completeContainer}>
-                               <View style={{flex: 1}}>
+                               <View style={{width: '70%'}}>
                                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>{section.title}</Text>
                                </View>
                                {section.title.includes('Complete') && !section.title.includes('Not') ?
-                                   <View style={{flex: 1}}>
+                                   <View style={{width: '30%'}}>
                                      <Text style={{
                                        fontSize: 18,
                                        fontWeight: 'bold',
@@ -181,6 +180,7 @@ const CourseSectionList = props => {
                                    :
                                    <Text></Text>
                                }
+
                              </View>
                          )}
                          keyExtractor={(item, index) => index}

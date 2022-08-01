@@ -47,9 +47,11 @@ const slides = [
 const Slide = ({item}) => {
     return  (
         <View style={{alignItems: 'center'}}>
-            <Image source={item.image} style={{height: '55%', width, resizeMode: 'contain'}}/>
+            <Image source={item.image} style={{height: '45%', width, resizeMode: 'contain'}}/>
             <View>
             <Text style={styles.title}>{item.title}</Text>
+            </View>
+            <View>
             <Text style={styles.subtitle}>{item.subtitle}</Text>
         </View>
         </View>
@@ -61,7 +63,7 @@ const onBoardingScreen = ({navigation}) => {
     const Footer = () => {
         return (
             <View style={{
-                height: height * 0.25,
+                height: height * 0.15,
                 justifyContent: 'space-between',
                 paddingHorizontal: 20,
             }}>
@@ -69,7 +71,7 @@ const onBoardingScreen = ({navigation}) => {
                     style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
-                        marginTop:20,
+                        marginTop:10,
                     }}>
                     {slides.map((_,index) => (
                         <View key={index} style={[styles.indicator,
@@ -121,7 +123,7 @@ const onBoardingScreen = ({navigation}) => {
         const offset = lastSlideIndex * width;
         ref?.current?.scrollToOffset({offset});
         setCurrentSlideIndex(lastSlideIndex);
-      
+
     }
     return(
         <SafeAreaView style={{flex: 1, backgroundColor: COLORS.primary}}>
@@ -131,7 +133,7 @@ const onBoardingScreen = ({navigation}) => {
                 onMomentumScrollEnd={updateCurrentSlideIndex}
                 pagingEnabled
                 data={slides}
-                contentContainerStyle={{height: height * 0.75}}
+                contentContainerStyle={{height: height * 0.85}}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({item}) => <Slide item={item}/>}
@@ -143,22 +145,19 @@ const onBoardingScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     title:{
         color: COLORS.white,
-        fontSize: 22,
+        fontSize: 24,
         fontWeight: 'bold',
         marginTop: 20,
         textAlign: 'center',
-
-
     },
     subtitle:{
         color: COLORS.white,
-        fontSize: 15.6,
+        fontSize: 20,
         maxWidth: '70%',
         marginTop: 10,
         textAlign: 'center',
         lineHeight: 23,
         width: 350,
-
     },
     indicator:{
         height: 2.5,
@@ -180,8 +179,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexGrow:1,
-        width: 0,
+        width: '100%',
     },
-
 });
 export default onBoardingScreen;
