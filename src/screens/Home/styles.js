@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
+    backgroundColor: '#EE3E41',
   },
   header: {
     marginTop: 10,
@@ -64,6 +65,12 @@ const styles = StyleSheet.create({
   searchButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  box: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
   },
 });
 

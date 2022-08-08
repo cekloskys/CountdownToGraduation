@@ -4,7 +4,7 @@ import {
   Text,
   ImageBackground,
   Pressable,
-  SafeAreaView,
+  SafeAreaView, Image,
 } from 'react-native';
 import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {useQuery, gql} from '@apollo/client';
 import 'localstorage-polyfill';
+import {ALERT_TYPE, Dialog, Root, Toast} from "react-native-alert-notification";
 
 const MY_COURSES_BY = gql`
   query CoursesBy(
@@ -106,18 +107,209 @@ const HomeScreen = props => {
   }, []);
 
   const navigation = useNavigation();
+
+  //localStorage.setItem('apTransferNotificationDisplayed', 'false');
+  var gpa = 0.00;
+  var allCoursesCtr = 0;
+  var complete = 0;
+
+  for (var i = 0; i < allCourses.length; i++) {
+    if (allCourses[i].cnt === 1 && allCourses[i].credits > 0) {
+      if(allCourses[i].grade !=='F'){
+        complete += allCourses[i].credits;
+      }
+      if(allCourses[i].grade !=='P'){
+        allCoursesCtr++;
+        switch (allCourses[i].grade ) {
+          case "A":
+            gpa += 4.0;
+            break;
+
+          case "A-":
+            gpa += 3.70;
+            break;
+
+          case "B+":
+            gpa += 3.33;
+            break;
+
+          case "B":
+            gpa += 3.0;
+            break;
+
+          case "B-":
+            gpa += 2.70;
+            break;
+
+          case "C+":
+            gpa += 2.30;
+            break;
+
+          case "C":
+            gpa += 2.00;
+            break;
+
+          case "C-":
+            gpa += 1.70;
+            break;
+
+          case "D+":
+            gpa += 1.30;
+            break;
+
+          case "D":
+            gpa += 1.0;
+            break;
+
+          case "F":
+            gpa += 0.0;
+
+        }
+      }}
+  }
+  if (gpa !== 0) {
+    gpa /= allCoursesCtr;
+    gpa = Math.round(gpa * 100) / 100;
+  }
+  const displayNotifications = () => {
+    if (localStorage.getItem('apTransferNotificationDisplayed') == null) {
+      Dialog.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Welcome',
+        textBody: 'Don\'t forget to input your AP/Transfer courses please.',
+        button: 'Close',
+      });
+      localStorage.setItem('apTransferNotificationDisplayed', 'true');
+    } else {
+      if (gpa >= 3.0 && credits < 30) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'Close',
+        });
+      } else if (gpa >= 3.0 && credits >= 30 && credits < 60) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations on becoming a Sophomore.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if (gpa >= 3.0 && credits >= 60 && credits < 90) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations on becoming a Junior.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if (gpa >= 3.0 && credits >= 90) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations on becoming a Senior.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if (gpa < 3.0 && credits < 30) {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'Careful!',
+          textBody: 'Your gpa is ' + gpa + '. Please check in with your advisors.',
+          button: 'Close',
+        });
+      } else if (gpa < 3.0 && credits >= 30 && credits < 60) {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'Careful!',
+          textBody: 'Your gpa is ' + gpa + '. Please check in with your advisors.',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations on becoming a Sophomore.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if (gpa < 3.0 && credits >= 60 && credits < 90) {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'Careful!',
+          textBody: 'Your gpa is ' + gpa + '. Please check in with your advisors.',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations on becoming a Junior.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if (gpa < 3.0 && credits >= 90) {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'Careful!',
+          textBody: 'Your gpa is ' + gpa + '. Please check in with your advisors.',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations on becoming a Senior.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      }
+    }
+  };
   return (
+      <Root>
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../../../assets/images/griffin_background_small.jpg')}
-        style={styles.image}
-      />
       <SafeAreaView style={{flex: 0.0}} />
       <View style={styles.header}>
         <Text style={styles.title}>
           Countdown to Graduation
           <Text style={styles.school}>{'\n'}Chestnut Hill College</Text>
         </Text>
+      </View>
+      <View style={styles.box}>
+        <Pressable onPress={displayNotifications}>
+          <Image
+              source={require('../../../assets/images/griffin_new.jpg')}
+          />
+        </Pressable>
       </View>
       {/* Button */}
       <View style={styles.bottomContainer}>
@@ -127,7 +319,6 @@ const HomeScreen = props => {
         <Pressable
             accessible={true}
             accessibilityRole={"button"}
-
           style={styles.searchButton}
           onPress={() => navigation.navigate('Get started!')}>
           <AntDesign name="user" size={25} color={'#f15454'} />
@@ -135,6 +326,7 @@ const HomeScreen = props => {
         </Pressable>
       </View>
     </View>
+      </Root>
   );
 };
 
