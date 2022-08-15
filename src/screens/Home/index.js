@@ -4,7 +4,7 @@ import {
   Text,
   ImageBackground,
   Pressable,
-  SafeAreaView, Image,
+  SafeAreaView, Image, Alert,
 } from 'react-native';
 import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -13,6 +13,17 @@ import {openDatabase} from 'react-native-sqlite-storage';
 import {useQuery, gql} from '@apollo/client';
 import 'localstorage-polyfill';
 import {ALERT_TYPE, Dialog, Root, Toast} from "react-native-alert-notification";
+
+const GET_MINORS = gql`
+  query Minors {
+    minors {
+      title
+      required
+      elective
+      count
+    }
+  }
+`;
 
 const MY_COURSES_BY = gql`
   query CoursesBy(
@@ -41,6 +52,9 @@ const tableName = 'courses';
 const courseDB = openDatabase({name: 'CourseList.db'});
 
 const HomeScreen = props => {
+
+  const [minors, setMinors] = useState([]);
+
   const [allCourses, setAllCourses] = useState([]);
 
   const {data, __, ___} = useQuery(MY_COURSES_BY, {
@@ -48,7 +62,7 @@ const HomeScreen = props => {
     fetchPolicy: 'network-only',
     errorPolicy: 'ignore'
   });
-  console.log(data);
+  // console.log(data);
 
   const getAllCourses = () => {
     courseDB.transaction(txn => {
@@ -171,6 +185,55 @@ const HomeScreen = props => {
     gpa /= allCoursesCtr;
     gpa = Math.round(gpa * 100) / 100;
   }
+
+  const {data: minordata, error: minorerror, loading} = useQuery(GET_MINORS)
+
+  useEffect(() => {
+    if (minorerror) {
+      console.log(minorerror.stack);
+      Alert.alert('Error fetching Minors!', minorerror.message);
+    }
+  }, [minorerror]);
+
+  useEffect(() => {
+    if (minordata) {
+      setMinors(minordata.minors);
+    }
+  }, [minordata]);
+
+
+
+  var minorsUpdate = [];
+  minors.forEach(minor => {
+    minorsUpdate.push({
+      title: minor.title,
+      required: minor.required,
+      count: minor.count
+    });
+  });
+
+  minorsUpdate.forEach(item => {
+    allCourses.forEach(course => {
+      item.required.forEach(req => {
+        if (req === course.code){
+          item.count++;
+        }
+      });
+    });
+  });
+
+  var storedMinors = [];
+
+  minorsUpdate.forEach(item =>{
+    if (item.count >= 3){
+      if (storedMinors.indexOf(item.title) === -1) {
+        storedMinors.push(item.title)
+      }
+    }
+  });
+
+console.log(storedMinors);
+
   const displayNotifications = () => {
     if (localStorage.getItem('apTransferNotificationDisplayed') == null) {
       Dialog.show({
@@ -180,15 +243,31 @@ const HomeScreen = props => {
         button: 'Close',
       });
       localStorage.setItem('apTransferNotificationDisplayed', 'true');
-    } else {
-      if (gpa >= 3.0 && credits < 30) {
+    }
+    else {
+      if (gpa !== 0 && gpa >= 3.0 && credits < 30 && storedMinors.length !== 0) {
         Dialog.show({
           type: ALERT_TYPE.SUCCESS,
           title: 'Congratulations!',
           textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
           button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'Reminder',
+              textBody: 'You may want to consider the following minors '+ storedMinors + '.',
+              button: 'Close',
+            });
+          },
         });
-      } else if (gpa >= 3.0 && credits >= 30 && credits < 60) {
+      } else if (gpa !== 0 && gpa >= 3.0 && credits < 30) {
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: 'Congratulations!',
+            textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+            button: 'Close',
+          });
+        }else if ((gpa >= 3.0 && credits >= 30 && credits < 60) && storedMinors.length !== 0) {
         Dialog.show({
           type: ALERT_TYPE.SUCCESS,
           title: 'Congratulations!',
@@ -198,13 +277,13 @@ const HomeScreen = props => {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations on becoming a Sophomore.',
+              textBody: 'Congratulations you\'re a Sophomore.' + ' You may want to consider the following minors '+ storedMinors + '.',
               //autoClose: 3000,
               button: 'Close',
             });
           },
         });
-      } else if (gpa >= 3.0 && credits >= 60 && credits < 90) {
+      }else if (gpa >= 3.0 && credits >= 30 && credits < 60) {
         Dialog.show({
           type: ALERT_TYPE.SUCCESS,
           title: 'Congratulations!',
@@ -214,7 +293,55 @@ const HomeScreen = props => {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations on becoming a Junior.',
+              textBody: 'Congratulations you\'re a Sophomore.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if ((gpa >= 3.0 && credits >= 60 && credits < 90) && storedMinors.length !== 0) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations you\'re a Junior.'+ ' You may want to consider the following minors '+ storedMinors + '.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      }else if (gpa >= 3.0 && credits >= 60 && credits < 90) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'Close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'CCongratulations you\'re a Junior.',
+              //autoClose: 3000,
+              button: 'Close',
+            });
+          },
+        });
+      } else if (gpa >= 3.0 && credits >= 90 && storedMinors.length !== 0) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Congratulations!',
+          textBody: 'Your GPA is at ' + gpa + '. Keep up the great work!',
+          button: 'close',
+          onPressButton: () => {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'You got this!',
+              textBody: 'Congratulations you\'re a Senior.'+ ' You may want to consider the following minors '+ storedMinors + '.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -230,13 +357,13 @@ const HomeScreen = props => {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations on becoming a Senior.',
+              textBody: 'Congratulations you\'re a Senior.',
               //autoClose: 3000,
               button: 'Close',
             });
           },
         });
-      } else if (gpa < 3.0 && credits < 30) {
+      } else if (gpa !== 0 && gpa < 3.0 && credits < 30) {
         Dialog.show({
           type: ALERT_TYPE.WARNING,
           title: 'Careful!',
@@ -253,7 +380,7 @@ const HomeScreen = props => {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations on becoming a Sophomore.',
+              textBody: 'Congratulations you\'re a Sophomore.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -269,7 +396,7 @@ const HomeScreen = props => {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations on becoming a Junior.',
+              textBody: 'Congratulations you\'re a Junior.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -285,7 +412,7 @@ const HomeScreen = props => {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations on becoming a Senior.',
+              textBody: 'Congratulations you\'re a Senior.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -307,7 +434,7 @@ const HomeScreen = props => {
       <View style={styles.box}>
         <Pressable onPress={displayNotifications}>
           <Image
-              source={require('../../../assets/images/griffin_new.jpg')}
+              source={require('../../../assets/images/griffin_new.png')}
           />
         </Pressable>
       </View>
