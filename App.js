@@ -72,4 +72,6 @@ const App = () => {
 );
 };
 
+LogBox.ignoreLogs(['onAnimatedValueUpdate']);
+
 export default App;

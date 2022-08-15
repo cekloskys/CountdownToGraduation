@@ -255,7 +255,7 @@ console.log(storedMinors);
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'Reminder',
-              textBody: 'You may want to consider the following minors '+ storedMinors + '.',
+              textBody: 'You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
               button: 'Close',
             });
           },
@@ -277,7 +277,7 @@ console.log(storedMinors);
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations you\'re a Sophomore.' + ' You may want to consider the following minors '+ storedMinors + '.',
+              textBody: 'Congratulations you\'re a Sophomore.' + ' You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -309,7 +309,7 @@ console.log(storedMinors);
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations you\'re a Junior.'+ ' You may want to consider the following minors '+ storedMinors + '.',
+              textBody: 'Congratulations you\'re a Junior.'+ ' You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -341,7 +341,7 @@ console.log(storedMinors);
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'Congratulations you\'re a Senior.'+ ' You may want to consider the following minors '+ storedMinors + '.',
+              textBody: 'Congratulations you\'re a Senior.'+ ' You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -441,7 +441,7 @@ console.log(storedMinors);
       {/* Button */}
       <View style={styles.bottomContainer}>
         <Text style={styles.countdown}>
-          {credits > 120 ? 0 : 120 - credits} credits until my graduation.
+          {credits > 120 ? 0 : 120 - credits} credits until my graduation
         </Text>
         <Pressable
             accessible={true}
