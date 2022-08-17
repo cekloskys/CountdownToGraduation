@@ -325,7 +325,7 @@ console.log(storedMinors);
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
-              textBody: 'CCongratulations you\'re a Junior.',
+              textBody: 'Congratulations you\'re a Junior.',
               //autoClose: 3000,
               button: 'Close',
             });
@@ -432,7 +432,10 @@ console.log(storedMinors);
         </Text>
       </View>
       <View style={styles.box}>
-        <Pressable onPress={displayNotifications}>
+        <Pressable
+            accessibilityRole={"button"}
+            accessibilityHint={'Press button to display any notifications'}
+            onPress={displayNotifications}>
           <Image
               source={require('../../../assets/images/griffin_new.png')}
           />

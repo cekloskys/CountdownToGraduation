@@ -360,6 +360,7 @@ const NewCourseScreen = props => {
           value={code}
           onChangeText={value => setCode(value)}
           style={styles.codeInput}
+          placeholderTextColor="grey"
           clearButtonMode={'while-editing'}
           placeholder={'Enter Course Code'}
           maxLength={10}
@@ -367,6 +368,7 @@ const NewCourseScreen = props => {
         <TextInput
           value={name}
           onChangeText={value => setName(value)}
+          placeholderTextColor="grey"
           style={styles.nameInput}
           clearButtonMode={'while-editing'}
           placeholder={'Enter Course Title'}
@@ -374,6 +376,7 @@ const NewCourseScreen = props => {
         <TextInput
           value={credits.toString()}
           onChangeText={value => setCredits(value)}
+          placeholderTextColor="grey"
           style={styles.semesterInput}
           clearButtonMode={'while-editing'}
           maxLength={11}
