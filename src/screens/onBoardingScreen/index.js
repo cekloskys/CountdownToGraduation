@@ -9,7 +9,6 @@ import {
     Text,
     TouchableOpacity, Image
 } from "react-native";
-import {accessibilityRole} from "react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes";
 
 
 const {width, height} = Dimensions.get("window");

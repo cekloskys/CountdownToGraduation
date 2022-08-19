@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, SectionList, FlatList } from 'react-native';
 import styles from './styles';
 import Course from '../../components/Course';
-import NewCourseButton from '../../components/NewCourseButton';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import {accessibilityRole} from "react-native/Libraries/DeprecatedPropTypes/DeprecatedViewPropTypes";
 
 const tableName = 'courses';
 
@@ -92,46 +90,35 @@ const CourseSectionList = props => {
           case "A":
             gpa += 4.0;
             break;
-
           case "A-":
             gpa += 3.70;
             break;
-
           case "B+":
             gpa += 3.33;
             break;
-
           case "B":
             gpa += 3.0;
             break;
-
           case "B-":
             gpa += 2.70;
             break;
-
           case "C+":
             gpa += 2.30;
             break;
-
           case "C":
             gpa += 2.00;
             break;
-
           case "C-":
             gpa += 1.70;
             break;
-
           case "D+":
             gpa += 1.30;
             break;
-
           case "D":
             gpa += 1.0;
             break;
-
           case "F":
             gpa += 0.0;
-
         }
     }}
   }

@@ -2,15 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   TextInput,
   Pressable,
-  ScrollView,
-  Platform,
-  KeyboardAvoidingView,
-  FlatList,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy, sortBy} from 'lodash';
 import styles from '../NewCourse/styles';

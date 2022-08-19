@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import {View, Text, TouchableOpacity, TextInput, Alert, Pressable, Platform, KeyboardAvoidingView} from 'react-native';
+import {View, Text, TextInput, Alert, Pressable} from 'react-native';
 import SelectBox from 'react-native-multi-selectbox'
 import { xorBy } from 'lodash'
 import styles from './styles';
-import SelectDropdown from 'react-native-select-dropdown/src/SelectDropdown';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import {value} from "lodash/seq";
-import ExistingCourse from "./index";
 
 const tableName = 'courses';
 
@@ -82,7 +78,6 @@ const ExistingCourseScreen = props => {
     item: 'Elective'
   }
   ];
-
   const gradeLetters = [
     {
       id: '1',
@@ -129,7 +124,6 @@ const ExistingCourseScreen = props => {
       item: 'F',
     },
   ];
-
   const passFail = [
     {
       id: '1',
@@ -271,7 +265,6 @@ const ExistingCourseScreen = props => {
 
   const [code, setCode] = useState(post.code);
   const [name, setName] = useState(post.name);
-  //const [credits, setCredits] = useState({id: newCreditId, item: newCreditItem});
   const [credits, setCredits] = useState(post.credits);
   const [status, setStatus] = useState({id: newStatusId, item: newStatusItem});
   const [designator, setDesignator] = useState({id: newDesignatorId, item: newDesignatorItem});
@@ -346,7 +339,6 @@ const ExistingCourseScreen = props => {
     }
 
     updateCourse();
-    // alert('Course Updated!');
 
     const updateRelatedCourses = () => {
       let grade = '';
@@ -357,7 +349,6 @@ const ExistingCourseScreen = props => {
       }else if (creditTypeCode !== "PF" && creditTypeCode !== "CR"){
         grade = selectedGradeAndPassFail.item
       }
-      // console.log('[DATA]', 'updateCourse: ' + code + name);
       courseDB.transaction(txn => {
         txn.executeSql(
             `UPDATE ${tableName} SET code = '${code}', name = '${name}', credits = '${credits}', status = '${status.item}',  grade = '${grade}', creditTypeCode = '${creditTypeCode}' WHERE relatedcode = '${post.code}'`, [],
@@ -370,10 +361,8 @@ const ExistingCourseScreen = props => {
         );
       });
     }
-
     updateRelatedCourses();
     alert('Course Updated!');
-
     navigation.navigate('All')
   };
 
@@ -397,7 +386,6 @@ const ExistingCourseScreen = props => {
 
   const onCourseDelete = () => {
     const deleteCourse = () => {
-      // console.log('[DATA]', 'Delete: ' + code + name);
       courseDB.transaction(txn => {
         txn.executeSql(
             `DELETE FROM ${tableName} WHERE id = ${post.id}`, [],
@@ -456,12 +444,8 @@ const ExistingCourseScreen = props => {
         );
       });
     }
-
     getStatusCourses();
-
-
   };
-
   function Grade() {
     console.log(selectedGradeLetters.item);
     if (status.item === "Complete") {
@@ -519,7 +503,6 @@ const ExistingCourseScreen = props => {
       }
     }
   }
-
   return (
       <View style={styles.container}>
         <View style={styles.newCourseContainer}>
@@ -540,7 +523,6 @@ const ExistingCourseScreen = props => {
               placeholder={'Enter Course Name'}
               placeholderTextColor={'grey'}
               clearButtonMode={'while-editing'}
-
           />
           <TextInput
               value={credits.toString()}
@@ -590,7 +572,6 @@ const ExistingCourseScreen = props => {
       </View>
 
   );
-
 
   function onChange() {
     return (val) => setStatus(val)

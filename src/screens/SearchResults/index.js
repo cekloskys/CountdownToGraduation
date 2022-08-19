@@ -63,20 +63,12 @@ const MY_COURSES_BY = gql`
 `;
 
 function SearchResults() {
-  // const route = useRoute();
-  // const courseCode = route.params.courseCode;
-  // const divisionCodes = route.params.divisionCodes;
-  // const courseTitle = route.params.courseTitle
 
   const navigation = useNavigation();
 
   const divisionCodes = JSON.parse(localStorage.getItem('division'));
   const courseCode = localStorage.getItem('code');
   const courseTitle = localStorage.getItem('title');
-
-  // console.log(divisionCodes);
-  // console.log(courseCode);
-  // console.log(courseTitle);
 
   const addCustomCourse = () => {
     const post = {
@@ -88,9 +80,6 @@ function SearchResults() {
   };
 
   const [results, setResults] = useState([]);
-
-  // const {data, error, loading} = useQuery(MY_COURSES);
-  // const {data, error, loading} = useQuery(MY_COURSES_BY_CODE, {variables: {courseCode}});
   const {data, error, loading} = useQuery(MY_COURSES_BY, {
     variables: {
       divisionCodes: divisionCodes,
@@ -99,7 +88,6 @@ function SearchResults() {
     },
     fetchPolicy: 'cache-first'
   });
-  //console.log(data);
   useEffect(() => {
     if (error) {
       console.log(error.stack);
@@ -136,9 +124,6 @@ function SearchResultsScreen() {
   console.log(courseCode);
 
   const [results, setResults] = useState([]);
-
-  // const {data, error, loading} = useQuery(MY_COURSES);
-  // const {data, error, loading} = useQuery(MY_COURSES_BY_CODE, {variables: {courseCode}});
   const {data, error, loading} = useQuery(MY_COURSES_BY, {
     variables: {divisionCodes: divisionCodes, courseCode: courseCode,},
   });
@@ -150,7 +135,6 @@ function SearchResultsScreen() {
   }, [error]);
 
   useEffect(() => {
-    // console.log('Testing');
     if (data) {
       console.log(data);
       setResults(data.coursesBy);

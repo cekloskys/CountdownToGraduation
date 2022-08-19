@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, SectionList } from 'react-native';
-import styles from './styles';
-import Course from '../../components/Course';
+import React from "react";
+import { View } from 'react-native';
 import NewCourseButton from '../../components/NewCourseButton';
-import { useNavigation } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
 import CourseSectionListMajor from "../../components/SectionListMajor";
 

@@ -4,7 +4,6 @@ import styles from './styles';
 import SelectBox from 'react-native-multi-selectbox';
 import {xorBy, sortBy} from 'lodash';
 import 'localstorage-polyfill';
-import SearchResults from '../SearchResults';
 import {useQuery, gql} from '@apollo/client';
 import 'localstorage-polyfill';
 import SearchCourse from '../../components/SearchCourse';

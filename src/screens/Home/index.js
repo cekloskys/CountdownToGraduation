@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  ImageBackground,
   Pressable,
   SafeAreaView, Image, Alert,
 } from 'react-native';
@@ -12,7 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {useQuery, gql} from '@apollo/client';
 import 'localstorage-polyfill';
-import {ALERT_TYPE, Dialog, Root, Toast} from "react-native-alert-notification";
+import {ALERT_TYPE, Dialog, Root} from "react-native-alert-notification";
 
 const GET_MINORS = gql`
   query Minors {
@@ -62,7 +61,6 @@ const HomeScreen = props => {
     fetchPolicy: 'network-only',
     errorPolicy: 'ignore'
   });
-  // console.log(data);
 
   const getAllCourses = () => {
     courseDB.transaction(txn => {
@@ -72,7 +70,6 @@ const HomeScreen = props => {
         (sqlTxn, res) => {
           console.log('Courses retrieved successfully');
           let len = res.rows.length;
-          // console.warn(len)
           if (len >= 0) {
             let results = [];
             for (let i = 0; i < len; i++) {
@@ -89,11 +86,8 @@ const HomeScreen = props => {
                 creditTypeCode: item.creditTypeCode,
                 cnt: item.cnt,
               });
-              // console.log(results[i])
             }
             setAllCourses(results);
-
-            // console.warn('[DATA]', results[0])
           }
         },
         error => {
@@ -121,8 +115,6 @@ const HomeScreen = props => {
   }, []);
 
   const navigation = useNavigation();
-
-  //localStorage.setItem('apTransferNotificationDisplayed', 'false');
   var gpa = 0.00;
   var allCoursesCtr = 0;
   var complete = 0;
@@ -138,46 +130,35 @@ const HomeScreen = props => {
           case "A":
             gpa += 4.0;
             break;
-
           case "A-":
             gpa += 3.70;
             break;
-
           case "B+":
             gpa += 3.33;
             break;
-
           case "B":
             gpa += 3.0;
             break;
-
           case "B-":
             gpa += 2.70;
             break;
-
           case "C+":
             gpa += 2.30;
             break;
-
           case "C":
             gpa += 2.00;
             break;
-
           case "C-":
             gpa += 1.70;
             break;
-
           case "D+":
             gpa += 1.30;
             break;
-
           case "D":
             gpa += 1.0;
             break;
-
           case "F":
             gpa += 0.0;
-
         }
       }}
   }
@@ -200,8 +181,6 @@ const HomeScreen = props => {
       setMinors(minordata.minors);
     }
   }, [minordata]);
-
-
 
   var minorsUpdate = [];
   minors.forEach(minor => {
@@ -278,7 +257,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Sophomore.' + ' You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -294,7 +272,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Sophomore.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -310,7 +287,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Junior.'+ ' You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -326,7 +302,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Junior.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -342,7 +317,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Senior.'+ ' You may want to consider the following minors: '+ storedMinors.join(', ') + '.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -358,7 +332,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Senior.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -381,7 +354,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Sophomore.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -397,7 +369,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Junior.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },
@@ -413,7 +384,6 @@ console.log(storedMinors);
               type: ALERT_TYPE.SUCCESS,
               title: 'You got this!',
               textBody: 'Congratulations you\'re a Senior.',
-              //autoClose: 3000,
               button: 'Close',
             });
           },

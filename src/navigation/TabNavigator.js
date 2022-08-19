@@ -1,5 +1,4 @@
 import React from 'react';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import AllScreen from '../screens/All';
 import MajorScreen from '../screens/Major';
 import CoreScreen from '../screens/Core';
